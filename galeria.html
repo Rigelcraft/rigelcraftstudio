@@ -287,6 +287,27 @@
     <p>Explora cómo construimos cada escena y echa un vistazo a los adelantos visuales de lo que está por venir en el canal.</p>
     <p><strong>Nota importante:</strong> Estas imágenes representan el trabajo en progreso de la serie. Algunos diseños o escenarios podrían verse diferentes en la versión final de los episodios oficiales.</p>
     <hr>
+
+    <h3 class="texto">🚀 ¡EPISODIO 3 FINALIZADO Y GALERÍA EXCLUSIVA! (05 / Mayo / 2026)</h3>
+    <p class="texto">¡Bienvenidos a la nueva cara de Rigelcraft Studio! Como primer gran estreno en esta versión mejorada de la web, les traigo noticias de <strong>"La llegada del estudiante estrella".</strong></p>
+    <P class="texto">El <strong>Episodio 3</strong> ya está totalmente terminado y listo para el estreno de este sábado. Ha sido un reto increíble recrear la ciudad de Nueva York y la Universidad Aeroespacial, pero el resultado vale totalmente la pena.</p>
+    <p class="texto"><strong>📸 Galería Exclusiva para la Comunidad</strong></p>
+    <p class="texto">Solo por estar aquí en la web, les he dejado una selección de fotografías extras de este tercer episodio.</p>
+
+<div class="slider-wrapper js-slider-group">
+    <div class="slider-container">
+        <div class="flecha flecha-izquierda js-prev">&#10094;</div>
+        <div class="flecha flecha-derecha js-next">&#10095;</div>
+        <div class="slider js-slider-canvas">
+            <div class="slide"><img src="Captura 5 Episodio 3.png"></div>
+            <div class="slide"><img src="Captura 6 Episodio 3.png"></div>
+            <div class="slide"><img src="Captura 7 Episodio 3.png"></div>
+        </div>
+    </div>
+    <div class="dots js-dots-container"></div>
+</div>
+
+<hr>
     <p class="texto">¡Hola a todos! (24 / Abril / 2026)</p>
     <p class="texto">Me alegra muchísimo anunciarles que por fin ha quedado terminada la animación del <strong>Episodio 3</strong> de <strong>«RIGELCRAFT: LA SERIE».</strong></p>
     <P class="texto">Ha sido un proceso intenso, pero el resultado está valiendo la pena.</p>
@@ -295,177 +316,102 @@
     <p class="texto">Manténganse atentos: En los próximos días les estaré compartiendo cómo quedó la miniatura oficial y revelaré el título definitivo del video por este mismo canal.</p>
     <p class="texto">Para calmar (o aumentar) un poco la curiosidad, aquí les dejo unos adelantos exclusivos de lo que se viene:</p>
 
-    <div class="slider-wrapper">
-        <div class="slider-container">
-            <div class="flecha flecha-izquierda" id="flechaIzq">&#10094;</div>
-            <div class="flecha flecha-derecha" id="flechaDer">&#10095;</div>
-            <div class="slider" id="slider">
-                <div class="slide">
-                    <img src="Captura 1 Episodio 3.png" alt="Captura 1 Episodio 3">
-                </div>
-                <div class="slide">
-                    <img src="Captura 2 Episodio 3.png" alt="Captura 2 Episodio 3">
-                </div>
-                <div class="slide">
-                    <img src="Captura 3 Episodio 3.png" alt="Captura 3 Episodio 3">
-                </div>
-                <div class="slide">
-                    <img src="Captura 4 Episodio 3.png" alt="Captura 4 Episodio 3">
-                </div>
-            </div>
+<div class="slider-wrapper js-slider-group">
+    <div class="slider-container">
+        <div class="flecha flecha-izquierda js-prev">&#10094;</div>
+        <div class="flecha flecha-derecha js-next">&#10095;</div>
+        <div class="slider js-slider-canvas">
+            <div class="slide"><img src="Captura 1 Episodio 3.png"></div>
+            <div class="slide"><img src="Captura 2 Episodio 3.png"></div>
+            <div class="slide"><img src="Captura 3 Episodio 3.png"></div>
+            <div class="slide"><img src="Captura 4 Episodio 3.png"></div>
         </div>
-        <div class="dots" id="dots"></div>
     </div>
+    <div class="dots js-dots-container"></div>
+</div>
 
     <hr>
     <div class="breadcrumb">
         <a href="index.html">Inicio</a><span> / Galería</span>
     </div>
 
-    <!-- Modal para imagen ampliada -->
     <div id="modal" class="modal">
         <span class="cerrar-modal">&times;</span>
         <img class="modal-content" id="imagenAmpliada">
     </div>
 
     <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sliders = document.querySelectorAll('.js-slider-group');
+    const modal = document.getElementById('modal');
+    const imagenAmpliada = document.getElementById('imagenAmpliada');
+    const cerrarModal = document.querySelector('.cerrar-modal');
+
+    sliders.forEach(wrapper => {
+        const sliderCanvas = wrapper.querySelector('.js-slider-canvas');
+        const slides = wrapper.querySelectorAll('.slide');
+        const btnPrev = wrapper.querySelector('.js-prev');
+        const btnNext = wrapper.querySelector('.js-next');
+        const dotsContainer = wrapper.querySelector('.js-dots-container');
+        
         let indiceActual = 0;
-        let cantidadImagenes = 0;
-        let intervaloAutomatico = null;
-        let slider = null;
-        let slides = [];
-        const tiempoEntreImagenes = 2000;
+        let intervalo;
 
-        function actualizarSlider() {
-            const desplazamiento = -indiceActual * 100;
-            slider.style.transform = 'translateX(' + desplazamiento + '%)';
-            
-            document.querySelectorAll('.dot').forEach(function(dot, i) {
-                if (i === indiceActual) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
-
-        function siguienteImagen() {
-            indiceActual = (indiceActual + 1) % cantidadImagenes;
-            actualizarSlider();
-        }
-
-        function anteriorImagen() {
-            indiceActual = (indiceActual - 1 + cantidadImagenes) % cantidadImagenes;
-            actualizarSlider();
-        }
-
-        function irAlIndice(indice) {
-            indiceActual = indice;
-            actualizarSlider();
-            if (intervaloAutomatico) {
-                clearInterval(intervaloAutomatico);
-                intervaloAutomatico = setInterval(siguienteImagen, tiempoEntreImagenes);
-            }
-        }
-
-        function pausarAutomatico() {
-            if (intervaloAutomatico) {
-                clearInterval(intervaloAutomatico);
-                intervaloAutomatico = null;
-            }
-        }
-
-        function reanudarAutomatico() {
-            if (intervaloAutomatico === null) {
-                intervaloAutomatico = setInterval(siguienteImagen, tiempoEntreImagenes);
-            }
-        }
-
-        function iniciarSlider() {
-            slider = document.getElementById('slider');
-            if (!slider) return;
-            
-            slides = slider.querySelectorAll('.slide');
-            cantidadImagenes = slides.length;
-            if (cantidadImagenes === 0) return;
-            
-            indiceActual = 0;
-            
-            const dotsContainer = document.getElementById('dots');
-            if (dotsContainer) {
-                dotsContainer.innerHTML = '';
-                slides.forEach((_, i) => {
-                    const dot = document.createElement('div');
-                    dot.className = 'dot';
-                    if (i === 0) dot.classList.add('active');
-                    dot.addEventListener('click', (function(indice) {
-                        return function() {
-                            pausarAutomatico();
-                            irAlIndice(indice);
-                            reanudarAutomatico();
-                        };
-                    })(i));
-                    dotsContainer.appendChild(dot);
-                });
-            }
-            
-            actualizarSlider();
-            
-            if (intervaloAutomatico) clearInterval(intervaloAutomatico);
-            intervaloAutomatico = setInterval(siguienteImagen, tiempoEntreImagenes);
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            iniciarSlider();
-            
-            const flechaIzq = document.getElementById('flechaIzq');
-            const flechaDer = document.getElementById('flechaDer');
-            
-            if (flechaIzq) {
-                flechaIzq.addEventListener('click', function() {
-                    pausarAutomatico();
-                    anteriorImagen();
-                    reanudarAutomatico();
-                });
-            }
-            
-            if (flechaDer) {
-                flechaDer.addEventListener('click', function() {
-                    pausarAutomatico();
-                    siguienteImagen();
-                    reanudarAutomatico();
-                });
-            }
-            const modal = document.getElementById('modal');
-            const imagenAmpliada = document.getElementById('imagenAmpliada');
-            const cerrarModal = document.querySelector('.cerrar-modal');
-            function agregarEventosClicImagenes() {
-                const imagenesSlider = document.querySelectorAll('.slide img');
-                imagenesSlider.forEach(function(img) {
-                    img.addEventListener('click', function() {
-                        pausarAutomatico();
-                        imagenAmpliada.src = this.src;
-                        modal.style.display = 'block';
-                    });
-                });
-            }
-            const observer = new MutationObserver(function() {
-                agregarEventosClicImagenes();
-            });
-            observer.observe(document.getElementById('slider'), { childList: true, subtree: true });
-            agregarEventosClicImagenes();
-            cerrarModal.onclick = function() {
-                modal.style.display = 'none';
-                reanudarAutomatico();
-            };
-            
-            modal.onclick = function(event) {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                    reanudarAutomatico();
-                }
-            };
+        // Crear puntos (dots)
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => moverA(i));
+            dotsContainer.appendChild(dot);
         });
+
+        const dots = dotsContainer.querySelectorAll('.dot');
+
+        function actualizar() {
+            sliderCanvas.style.transform = `translateX(-${indiceActual * 100}%)`;
+            dots.forEach((d, i) => d.classList.toggle('active', i === indiceActual));
+        }
+
+        function siguiente() {
+            indiceActual = (indiceActual + 1) % slides.length;
+            actualizar();
+        }
+
+        function moverA(i) {
+            indiceActual = i;
+            actualizar();
+            reiniciarAuto();
+        }
+
+        function reiniciarAuto() {
+            clearInterval(intervalo);
+            intervalo = setInterval(siguiente, 2500);
+        }
+
+        // Eventos
+        btnNext.addEventListener('click', () => { siguiente(); reiniciarAuto(); });
+        btnPrev.addEventListener('click', () => { 
+            indiceActual = (indiceActual - 1 + slides.length) % slides.length;
+            actualizar();
+            reiniciarAuto();
+        });
+
+        slides.forEach(slide => {
+            slide.querySelector('img').addEventListener('click', function() {
+                imagenAmpliada.src = this.src;
+                modal.style.display = 'block';
+                sliders.forEach(s => clearInterval(s.dataset.intervalId));
+            });
+        });
+
+        intervalo = setInterval(siguiente, 2500);
+        wrapper.dataset.intervalId = intervalo; // Guardar referencia
+    });
+
+    // Cerrar Modal
+    cerrarModal.onclick = () => modal.style.display = 'none';
+    modal.onclick = (e) => { if(e.target === modal) modal.style.display = 'none'; };
+});
     </script>
 </body>
 </html>
