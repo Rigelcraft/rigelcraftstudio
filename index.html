@@ -84,7 +84,7 @@
         }
 
         h2.titulo-video {
-            color: #ff0000;
+            color: #f10000;
             font-size: 40px;
             text-shadow: 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000;
             margin-left: 2%;
@@ -114,12 +114,16 @@
             text-decoration: underline;
             font-weight: bold;
             transition: 0.3s;
-            text-shadow: 0 0 5px #000;
+            text-shadow: 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000;
         }
 
         a:hover {
             color: #fff;
             text-shadow: 0 0 10px #58a6ff, 0 0 20px #58a6ff;
+        }
+
+        li {
+            margin-bottom: 5px;
         }
 
         label {
@@ -167,26 +171,61 @@
                 background-attachment: scroll; 
                 overflow-x: hidden; 
             }
+
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                background-image: url("fondo.png");
+                background-size: cover;
+                background-position: center;
+            }
             .mega-titulo {
-                font-size: clamp(35px, 15vw, 80px) !important;
-                -webkit-text-stroke: 1px #424242; /* Trazo más fino en móvil */
+                font-size: clamp(35px, 18vw, 70px) !important;
+                -webkit-text-stroke: 1px #424242;
+                text-align: center;
+                margin-right: 5%;
+				background-size: 350px;
+                line-height: 1.4;
             }
             p, h3, ul {
-                font-size: 17px !important; 
-                margin-left: 5% !important;
-                margin-right: 5% !important;
+                font-size: 18px !important; 
+                margin-left: 4% !important;
+                margin-right: 4% !important;
             }
             h2.titulo-buzon, h2.titulo-video { 
-                font-size: 28px !important; 
-                margin-left: 5% !important;
+                font-size: 26px !important; 
+                margin-left: 4% !important;
+            }
+
+            input[type="text"], select, textarea {
+                font-size: 16px !important;
+                padding: 10px;
+            }
+
+            button[type="submit"] {
+                width: 92%;
+                margin-left: 4%;
+                padding: 15px;
+                font-size: 18px;
             }
             iframe {
                 margin: 0 auto !important;
-                width: 95%;
+                width: 92%;
+                display: block;
+                border-width: 3px;
             }
             form { 
                 margin-left: 5% !important; 
                 margin-right: 5% !important;
+            }
+            button[type="submit"] {
+                height: 55px;
+                font-size: 20px !important;
             }
         }
     </style>
@@ -211,7 +250,7 @@
 
     <hr>
     <h2 class="titulo-video"><strong><em>ÚLTIMO VIDEO DEL CANAL</em></strong></h2>
-    <iframe src="https://www.youtube.com/embed/gdAbks58_2E" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/TDN3ApDdt-A" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     <hr>
 
     <ul>
@@ -219,7 +258,8 @@
         <li><a href="guiones.html">📄 GUIONES DE LA SERIE</a></li>
         <li><a href="galeria.html">📸 ADELANTOS DE LA SERIE</a></li>
         <li><a href="info.html">📊 INFORME DE AVANCE</a></li>
-    </ul>
+	    <li><a href="versiones.html">📂 VERSIONES DE LA WEB</a></li>
+	</ul>
 
     <hr>
     <h2 class="titulo-buzon"><strong><em>BUZÓN DE SUGERENCIAS</em></strong></h2>
@@ -255,7 +295,7 @@
     <hr>
     <p><strong>RIGELCRAFT STUDIO:</strong> <em>Creando historias entre las estrellas. 🚀</em></p>
     <p>© 2026 – Todos los derechos reservados.</p>
-    <p><strong>Versión Actual:</strong> <span style="color: #00ff00;">2.0.0</span></p>
+	<p style="color: #00FF00;"><strong>Versión Actual:</strong> <span style="color: #00FF00;">2.1.0</span></p>
 
     <script>
         const form = document.getElementById("buzon-rigelcraft");
@@ -285,5 +325,43 @@
             btnEnviar.style.display = "block";
         });
     </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 </html>

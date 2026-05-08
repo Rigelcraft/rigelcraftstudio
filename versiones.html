@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preestrenos Exclusivos | Rigelcraft Studio</title>
+    <title>Versiones Web | Rigelcraft Studio</title>
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Angkor&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Angkor&display=swap');
         
         body {
-            background-image: url("preestrenos.jpg");
+            background-image: url("versiones.png");
             background-size: cover;
             background-attachment: fixed;
         }
@@ -17,7 +17,7 @@
             border: none;
             width: 100%; 
             height: 3px;           
-            background: linear-gradient(90deg, #ff8800, #ff0000, #f30096); 
+            background: linear-gradient(90deg, #FFAA00, #FFFF00); 
             box-shadow: 0 0 10px #ffa600, 0 0 10px #ffa600;
             margin: 30px 0;
         }
@@ -26,7 +26,7 @@
             text-align: left;
             width: 100%;
             margin: 20px 0 40px 2%; 
-            color: #e6edf3;
+            color: #EFB810;
             font-size: 20px;
             text-shadow: 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000;
             margin-left: 2%;
@@ -46,30 +46,6 @@
             text-align: left;
         }
 
-        .texto {
-            color: #fffb00;
-            font-size: 22px;
-            text-shadow: 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000;
-            margin-left: 2%;
-            text-align: left;
-        }
-
-        .publicado {
-            color: #00ff22;
-            font-size: 22px;
-            text-shadow: 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000;
-            margin-left: 2%;
-            text-align: left;
-        }
-
-        .espera {
-            color: #ff0000;
-            font-size: 22px;
-            text-shadow: 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000;
-            margin-left: 2%;
-            text-align: left;
-        }
-
         .mega-titulo {
             font-family:  'Angkor','Anton', Arial, sans-serif;
             font-size: clamp(40px, 8vw, 130px);
@@ -78,22 +54,22 @@
             letter-spacing: 2px;
             margin: 0;
             line-height: 1;
-            background-image: url('https://img.freepik.com/vector-premium/textura-transparente-prominencias-solares-rio-lava-volcan-o-vista-superior-superficie-magma-brillante_314759-1137.jpg'); 
-            background-size: 350px;
+            background-image: url('https://i.pinimg.com/736x/c5/2f/82/c52f82c509b9fc39090624170b289b8d.jpg'); 
+            background-size: 250px;
             background-repeat: repeat;
             background-position: center;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             color: transparent; 
-            -webkit-text-stroke: 1.5px #570000; 
+            -webkit-text-stroke: 1.5px #754E00; 
             filter: 
-                drop-shadow(0 0 10px #ff7b00)
-                drop-shadow(0 0 20px #ff7b00);
+                drop-shadow(0 0 10px #D49E00)
+                drop-shadow(0 0 20px #D49E00);
                 max-width: 95%;
             word-wrap: break-word;
             overflow-wrap: break-word;
-            display: block;
+            display: inline-block;
             padding-right: 10px;
             box-sizing: border-box;
         }
@@ -107,33 +83,24 @@
         }
 
         h2 {
-            color: #ff9100;
+            color: #EFB810;
             font-size: 50px;
             text-shadow: 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000;
             margin-left: 2%;
             text-align: left;
         }
 
-        iframe {
-            margin-left: 2%;
-            display: block;
-            border: 5px solid #ff7300;
-            width: 96%;
-            max-width: 1500px;
-            aspect-ratio: 16 / 9;
-        }
-
-        a {
-            color: #ff9100;
-            text-decoration: underline;
+        span {
+            color: #EFB810;
+            text-decoration: none;
             font-weight: bold;
             transition: 0.3s;
             text-shadow: 0 0 5px #000;
         }
 
-        span {
-            color: #ff9100;
-            text-decoration: none;
+        a {
+            color: #EFB810;
+            text-decoration: underline;
             font-weight: bold;
             transition: 0.3s;
             text-shadow: 0 0 5px #000;
@@ -141,84 +108,110 @@
 
         a:hover {
             color: #fff;
-            text-shadow: 0 0 10px #ff9100, 0 0 20px #ff9100;
+            text-shadow: 0 0 10px #EFB810, 0 0 20px #EFB810;
+        }
+
+        ul {
+            color: #e6edf3;
+            font-size: 22px;
+            text-shadow: 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000;
+            margin-left: 2%;            
+            padding-left: 0;            
+            list-style-position: inside;
+            text-align: left;
+        }
+
+        .t {
+        text-shadow: 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000, 0 0 4px #000;
         }
 
         @media (max-width: 600px) {
             body { 
-                background-attachment: fixed; 
-				background-position: 40% center !important;
+                background-attachment: scroll; 
+                overflow-x: hidden; 
             }
-            
+
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                background-image: url("fondo.png");
+                background-size: cover;
+                background-position: center;
+            }
             .mega-titulo {
-                font-size: clamp(15px, 9vw, 50px) !important;
-                -webkit-text-stroke: 1px #570000;
-                text-align: center !important; /* Centrado igual que la galería */
-                margin: 0 auto !important;
-                display: block;
-                padding: 0 10px;
-				background-size: 200px;
+                font-size: clamp(35px, 11vw, 70px) !important;
+                -webkit-text-stroke: 1px #424242;
+                text-align: center;
+                margin-right: 5%;
+                line-height: 1.4;
+				background-size: 250px;
             }
-			.contenedor-mega-titulo {
-                text-align: center !important;
-                margin-left: 0 !important;
-                width: 100% !important;
-            }
-            .breadcrumb {
-                font-size: 16px !important;
-				text-align: left !important;
-				margin-left: 5% !important;
-                width: 100% !important;
-            }
-            
-            p, h3, .texto, .publicado {
+            p, h3, ul {
                 font-size: 18px !important; 
-                margin-left: 5% !important;
-                margin-right: 5% !important;
+                margin-left: 4% !important;
+                margin-right: 4% !important;
             }
-            
+
             h2 {
                 font-size: 32px !important; 
-                margin-left: 5% !important;
-                margin-right: 5% !important;
+                margin-left: 4% !important;
+                margin-right: 4% !important;
             }
             
-            iframe {
-                margin: 0 auto !important;
-                width: 90% !important;
-                border-width: 3px;
+            .contenedor-mega-titulo {
+                margin-left: 2%;
             }
         }
     </style>
 </head>
 <body>
-    <hr>
+        <hr>
     <div class="breadcrumb">
-        <a href="index.html">Inicio</a><span> / Preestrenos</span>
+        <a href="index.html">Inicio</a><span> / Versiones</span>
     </div>
     <div class="contenedor-mega-titulo">
-        <h1 class="mega-titulo">PREESTRENOS EXCLUSIVOS</h1>
+        <h1 class="mega-titulo">VERSIONES DE LA WEB</h1>
     </div>
     <hr>
-    <h3>¡Bienvenido a la zona de adelantos de Rigelcraft Studio!</h3>
-    <p>Aquí es donde el futuro toma forma. En esta sección encontrarás adelantos de nuestros próximos proyectos, videos no listados y escenas experimentales que aún no llegan al canal principal.</p>
-    <p><strong>Nota importante:</strong> Estos videos son adelantos de producción. El resultado final en YouTube podría variar después de la edición final.</p>
+    <h3>Bitácora de desarrollo de Rigelcraft Studio</h3>
+    <p>En esta sección documentamos la evolución de nuestra plataforma. Desde los primeros días en WordPress hasta la optimización total con código puro y hasta las últimas versiones.</p>
+    <p><strong>Versión:</strong><span class="t" style="color: #00FF00;"> 2.1.0</span> – Optimización completa para dispositivos móviles y apertura del sistema de historial de versiones.</p>
     <hr>
-    <h2><strong><i>Adelanto Episodio 3</i></strong></h2>
-    <h3 class="texto"><strong><em>Episodio 3: Trailer</em></strong></h3>
-    <iframe src="https://www.youtube.com/embed/3uFIVfsBlrM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    <p class="texto"><strong>Fecha de estreno: 09/May/2026 – 06:00 p.m. (GTM -5)</strong></p>
-    <p class="espera">(Por estrenarse)</p>
+    <h2><strong><i>V: 2.1.0 - La Actualización de Movilidad</i>
+    </strong></h2>
+<p>Optimización completa para dispositivos móviles y apertura del sistema de historial de versiones.</p>
+<ul>
+        <li>📱 <strong>Adaptabilidad:</strong> La interfaz ahora se ajusta automáticamente a celulares y tablets.</li>
+        <li>📜 <strong>Historial Abierto:</strong> Se añade esta nueva sección para que la comunidad siga el progreso técnico de la web.</li>
+        <li>🚀 <strong>Rendimiento:</strong> Eliminación de residuos de código para una carga más veloz.</li>
+    </ul>
     <hr>
-    <h2><strong><i>Adelanto video SolarBalls</i></strong></h2>
-    <h3 class="texto"><strong><em>Reacción: Nuestros Planetas Se Vuelven Errantes. Parte 1</em></strong></h3>
-    <iframe src="https://www.youtube.com/embed/TDN3ApDdt-A" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    <p class="texto"><strong>Fecha de estreno: 28/Abr/2026 – 12:00 p.m. (GTM -5)</strong></p>
-    <p class="publicado">(Publicado)</p>
+    <h2><strong><i>V: 2.0.0 - El Salto al Código Puro</i>
+    </strong></h2>
+<p>La gran migración técnica.</p>
+<ul>
+        <li>💻 <strong>Adiós WordPress:</strong> Reconstrucción total de la web desde cero usando únicamente HTML5 y CSS3.</li>
+        <li>🎨 <strong>Interfaz Personalizada:</strong> Control absoluto sobre el diseño, permitiendo efectos visuales imposibles en la versión anterior.</li>
+        <li>⚡ <strong>Optimización Estructural:</strong> Limpieza de código para eliminar la pesadez de los plugins y mejorar la estabilidad.</li>
+    </ul>
+    <hr>
+    <h2><strong><i>V: 1.0.0 - El Inicio en WordPress</i>
+    </strong></h2>
+<p>El origen de la plataforma.</p>
+<ul>
+        <li>🌐 <strong>Lanzamiento Oficial:</strong> Primera versión de Rigelcraft Studio disponible para el público.</li>
+        <li>📂 <strong>Contenido Base:</strong> Implementación inicial de las secciones de Galería, Guiones y Preestrenos.</li>
+        <li>🛠️ <strong>Gestión CMS:</strong> Uso de herramientas de WordPress para establecer la estructura inicial del sitio.</li>
+    </ul>
     <hr>
     <div class="breadcrumb">
-        <a href="index.html">Inicio</a><span> / Preestrenos</span>
-    </div>
+        <a href="index.html">Inicio</a><span> / Versiones</span>
+</div>
 <!-- Code injected by live-server -->
 <script>
 	// <![CDATA[  <-- For SVG support

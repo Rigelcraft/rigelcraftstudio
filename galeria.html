@@ -110,10 +110,11 @@
             text-align: left;
         }
 
-        .slider-wrapper {
-            width: 80%;
-            margin: 0 auto;
-            position: center;
+		.slider-wrapper {
+		    width: 85%;
+		    margin: 30px auto;
+		    position: relative;
+		    left: 0;
         }
 
         .slider-container {
@@ -239,14 +240,23 @@
             color: white;
         }
 
+		.slide img {
+		    object-fit: contain;
+		    background-color: #000;
+		}
+
         @media (max-width: 600px) {
             body {
-                background-attachment: scroll;
+                background-attachment: fixed;
             }
             .mega-titulo {
-                font-size: clamp(15px, 9vw, 50px) !important;
+                font-size: clamp(15px, 10vw, 50px) !important;
                 -webkit-text-stroke: 1px #150050;
-                margin-left: 2%;
+				text-align: center !important;
+				margin: 0 auto !important;
+				display: block;
+				padding: 0 10px;
+				background-size: 250px;
             }
             .breadcrumb {
                 font-size: 16px !important;
@@ -258,8 +268,13 @@
                 margin-right: 5% !important;
             }
             .slider-wrapper {
-                width: 95%;
+				width: 90% !important;
+				margin-right: 5%;
+				margin-left: 5%;
             }
+			.slider-container {
+			    border-width: 3px; 
+			    }
             .flecha {
                 font-size: 25px;
                 padding: 5px 12px;
@@ -270,6 +285,11 @@
             .flecha-derecha {
                 right: 2px;
             }
+			.contenedor-mega-titulo {
+		        text-align: center;
+				margin-left: 0 !important;
+				width: 100% !important;
+		   }
         }
     </style>
 </head>
@@ -356,8 +376,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let indiceActual = 0;
         let intervalo;
-
-        // Crear puntos (dots)
         slides.forEach((_, i) => {
             const dot = document.createElement('div');
             dot.className = 'dot' + (i === 0 ? ' active' : '');
@@ -388,7 +406,6 @@ document.addEventListener('DOMContentLoaded', function() {
             intervalo = setInterval(siguiente, 2500);
         }
 
-        // Eventos
         btnNext.addEventListener('click', () => { siguiente(); reiniciarAuto(); });
         btnPrev.addEventListener('click', () => { 
             indiceActual = (indiceActual - 1 + slides.length) % slides.length;
@@ -413,5 +430,43 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.onclick = (e) => { if(e.target === modal) modal.style.display = 'none'; };
 });
     </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 </html>
