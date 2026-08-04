@@ -250,7 +250,7 @@
 
     <hr>
     <h2 class="titulo-video"><strong><em>ÚLTIMO VIDEO DEL CANAL</em></strong></h2>
-    <!-- El atributo id="iframe-video" es crucial aquí para que JavaScript lo encuentre -->
+    <!-- El reproductor inicia vacío para no cargar 2 veces. El script pondrá el video nuevo. -->
     <iframe id="iframe-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     <hr>
 
@@ -306,40 +306,44 @@
 
     <script>
         // ==========================================
-        // 1. AUTOMATIZACIÓN DEL ÚLTIMO VIDEO DE YOUTUBE
+        // 1. AUTOMATIZACIÓN DEL ÚLTIMO VIDEO DE YOUTUBE (VERSIÓN MEJORADA)
         // ==========================================
         document.addEventListener("DOMContentLoaded", () => {
-            // ⚠️ IMPORTANTE: Debes colocar el ID real de tu canal aquí (Empieza con UC)
             const CHANNEL_ID = "UCyzAeU4uu4lcJDzkUd6Esnw"; 
+            const iframe = document.getElementById("iframe-video");
             
-            // Verificación para evitar errores si aún no has puesto tu ID
-            if (CHANNEL_ID === "TU_CHANNEL_ID_AQUI") {
-                console.log("Falta configurar el Channel ID para cargar el último video.");
-                return;
-            }
+            // Utilizamos AllOrigins para saltarnos el bloqueo y desactivar la memoria caché
+            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+            const apiUrl = `https://api.allorigins.win/get?disableCache=true&url=${encodeURIComponent(rssUrl)}`;
 
-            const tiempoActual = new Date().getTime();
-            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}&t=${tiempoActual}`;
-            const apiConverterUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-
-            fetch(apiConverterUrl)
+            fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === 'ok' && data.items.length > 0) {
-                        // Tomamos el primer elemento que es el video más reciente
-                        const ultimoVideo = data.items[0];
-                        // Extraemos el ID del video del link (ej: https://www.youtube.com/watch?v=dQw4w9WgXcQ -> dQw4w9WgXcQ)
-                        const videoId = ultimoVideo.link.split('v=')[1];
-                        
-                        if (videoId) {
-                            const iframe = document.getElementById("iframe-video");
-                            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                    // Procesamos el código XML crudo de YouTube
+                    const parser = new DOMParser();
+                    const xml = parser.parseFromString(data.contents, "text/xml");
+                    
+                    // Buscamos la etiqueta del primer video
+                    const primerVideo = xml.querySelector("entry");
+                    if (primerVideo) {
+                        const idTag = primerVideo.querySelector("id");
+                        if (idTag) {
+                            // YouTube siempre entrega el ID en formato "yt:video:ID_AQUI"
+                            const videoId = idTag.textContent.split("yt:video:")[1];
+                            if (videoId) {
+                                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                                return; // Si todo salió bien, terminamos aquí
+                            }
                         }
                     }
+                    
+                    // Si el XML carga pero no hay video, ponemos el de respaldo
+                    iframe.src = "https://www.youtube.com/embed/ht9ibMAhodg";
                 })
                 .catch(error => {
                     console.error("Error al obtener el último video de Rigelcraft:", error);
-                    // Si falla, el iframe se queda con el video de respaldo (ht9ibMAhodg) tal como pediste
+                    // Fallback de seguridad: si el internet del usuario falla, se pone el video antiguo
+                    iframe.src = "https://www.youtube.com/embed/ht9ibMAhodg";
                 });
         });
 
