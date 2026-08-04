@@ -306,43 +306,33 @@
 
     <script>
         // ==========================================
-        // 1. AUTOMATIZACIÓN DEL ÚLTIMO VIDEO DE YOUTUBE (VERSIÓN MEJORADA)
+        // 1. AUTOMATIZACIÓN DEL ÚLTIMO VIDEO (API OFICIAL YOUTUBE)
         // ==========================================
         document.addEventListener("DOMContentLoaded", () => {
             const CHANNEL_ID = "UCyzAeU4uu4lcJDzkUd6Esnw"; 
+            // Esta es la misma llave de tu Firebase, ahora autorizada para YouTube
+            const API_KEY = "AIzaSyBNr-hwGarQxNOKhcHkPm33egsmi4O3DgE"; 
             const iframe = document.getElementById("iframe-video");
             
-            // Utilizamos AllOrigins para saltarnos el bloqueo y desactivar la memoria caché
-            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
-            const apiUrl = `https://api.allorigins.win/get?disableCache=true&url=${encodeURIComponent(rssUrl)}`;
+            // Petición oficial a los servidores de Google
+            const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&order=date&maxResults=1`;
 
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    // Procesamos el código XML crudo de YouTube
-                    const parser = new DOMParser();
-                    const xml = parser.parseFromString(data.contents, "text/xml");
-                    
-                    // Buscamos la etiqueta del primer video
-                    const primerVideo = xml.querySelector("entry");
-                    if (primerVideo) {
-                        const idTag = primerVideo.querySelector("id");
-                        if (idTag) {
-                            // YouTube siempre entrega el ID en formato "yt:video:ID_AQUI"
-                            const videoId = idTag.textContent.split("yt:video:")[1];
-                            if (videoId) {
-                                iframe.src = `https://www.youtube.com/embed/${videoId}`;
-                                return; // Si todo salió bien, terminamos aquí
-                            }
+                    if (data.items && data.items.length > 0) {
+                        // La API oficial nos entrega el ID exacto del último video sin rodeos
+                        const videoId = data.items[0].id.videoId;
+                        if (videoId) {
+                            iframe.src = `https://www.youtube.com/embed/${videoId}`;
                         }
+                    } else {
+                        iframe.src = "https://www.youtube.com/embed/ht9ibMAhodg";
                     }
-                    
-                    // Si el XML carga pero no hay video, ponemos el de respaldo
-                    iframe.src = "https://www.youtube.com/embed/ht9ibMAhodg";
                 })
                 .catch(error => {
-                    console.error("Error al obtener el último video de Rigelcraft:", error);
-                    // Fallback de seguridad: si el internet del usuario falla, se pone el video antiguo
+                    console.error("Error con la API de YouTube:", error);
+                    // Respaldo de seguridad
                     iframe.src = "https://www.youtube.com/embed/ht9ibMAhodg";
                 });
         });
