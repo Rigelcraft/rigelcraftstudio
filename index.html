@@ -313,15 +313,14 @@
             const API_KEY = "AIzaSyBNr-hwGarQxNOKhcHkPm33egsmi4O3DgE"; 
             const iframe = document.getElementById("iframe-video");
             
-            // AÑADIDO: Filtro '&type=video' para obligar a la API a buscar solo videos
             const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&order=date&maxResults=1&type=video`;
 
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    // SISTEMA DE DIAGNÓSTICO: Si Google rechaza la conexión, te lo dirá en pantalla
+                    // Si ocurre un error, carga el video de respaldo silenciosamente
                     if (data.error) {
-                        alert("⚠️ Error de Google: " + data.error.message + "\n\nSi dice 'API not enabled', revisa que hayas habilitado YouTube Data API v3 en Google Cloud.");
+                        console.error("Error de API de YouTube:", data.error.message);
                         iframe.src = "https://www.youtube.com/embed/ht9ibMAhodg";
                         return;
                     }
