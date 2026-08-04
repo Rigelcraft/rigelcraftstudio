@@ -251,7 +251,7 @@
     <hr>
     <h2 class="titulo-video"><strong><em>ÚLTIMO VIDEO DEL CANAL</em></strong></h2>
     <!-- El atributo id="iframe-video" es crucial aquí para que JavaScript lo encuentre -->
-    <iframe id="iframe-video" src="https://www.youtube.com/embed/ht9ibMAhodg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe id="iframe-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     <hr>
 
     <ul>
@@ -318,7 +318,8 @@
                 return;
             }
 
-            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+            const tiempoActual = new Date().getTime();
+            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}&t=${tiempoActual}`;
             const apiConverterUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
             fetch(apiConverterUrl)
