@@ -666,11 +666,18 @@
             guardarDatosEnNube();
         }
 
+
+
         document.getElementById("btn-resetear").addEventListener("click", () => {
             if (confirm("⚠️ ¡ADVERTENCIA CRÍTICA!\n¿Estás seguro de querer borrar TODO?")) {
                 torneoGalactico = generarEstructuraBase();
                 guardarDatosEnNube();
             }
+        });
+
+        // 👇 PEGA ESTO JUSTO AQUÍ ABAJO 👇
+        document.addEventListener("DOMContentLoaded", () => {
+            inicializarFirebaseListener();
         });
     </script>
 </body>
