@@ -737,7 +737,7 @@
         }
 
         document.getElementById("btn-resetear").addEventListener("click", () => {
-            if (confirm("⚠️ ¡ADVERTENCIA CRÍTICA!\n¿Estás seguro de querer borrar TODO y cargar la nueva estructura limpia de 19 grupos a Firebase?")) {
+            if (confirm("⚠️ ¡ADVERTENCIA CRÍTICA!\n¿Estás seguro de querer borrar TODO?")) {
                 torneoGalactico = generarEstructuraBase();
                 guardarDatosEnNube();
             }
