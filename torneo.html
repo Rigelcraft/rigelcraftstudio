@@ -76,13 +76,24 @@
         .contenedor-lista-global { width: 96%; max-width: 900px; margin: 30px auto; background: rgba(0, 0, 0, 0.85); border: 2px solid #00ccff; border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 204, 255, 0.3); }
         .tarjeta { background: rgba(0, 0, 0, 0.85); border: 2px solid #00ccff; border-radius: 12px; padding: 18px; box-shadow: 0 0 12px rgba(0, 204, 255, 0.3); transition: transform 0.3s; }
         .tarjeta:hover { box-shadow: 0 0 22px rgba(0, 204, 255, 0.6); transform: translateY(-3px); }
-        .titulo-tarjeta { color: #00fff2; font-size: 22px; text-align: center; border-bottom: 2px solid #00ccff; padding-bottom: 8px; margin-bottom: 15px; text-shadow: 0 0 6px #000; }
+        
+        /* Botón para cerrar grupos */
+        .btn-cerrar-grupo { background: rgba(213,0,0,0.2); color: #ff5252; border: 1px solid #ff5252; padding: 6px 10px; border-radius: 6px; cursor: pointer; float: right; font-size: 13px; font-weight: bold; transition: 0.3s; }
+        .btn-cerrar-grupo:hover { background: #d50000; color: #fff; }
+
+        .titulo-tarjeta { color: #00fff2; font-size: 22px; text-align: left; margin: 0; text-shadow: 0 0 6px #000; }
 
         .fila-participante { display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.05); padding: 8px 12px; border-radius: 8px; margin-bottom: 12px; gap: 10px; }
         .pos-badge { font-size: 14px; font-weight: bold; padding: 5px 9px; border-radius: 6px; min-width: 45px; text-align: center; color: #fff; margin-right: 15px; flex-shrink: 0; }
-        .pos-1, .pos-2 { background-color: #00c853; box-shadow: 0 0 8px #00c853; }
-        .pos-3 { background-color: #ff9100; box-shadow: 0 0 8px #ff9100; }
-        .pos-4 { background-color: #d50000; box-shadow: 0 0 6px #d50000; }
+        
+        /* Colores para las posiciones dentro de la tarjeta de Grupo */
+        .pos-1 { background-color: #00c853; box-shadow: 0 0 8px #00c853; }
+        .pos-2 { background-color: #ff9100; box-shadow: 0 0 8px #ff9100; }
+        .pos-3, .pos-4 { background-color: #d50000; box-shadow: 0 0 6px #d50000; }
+        
+        /* Colores para el Ranking Global */
+        .pos-vivo { background-color: #00c853; box-shadow: 0 0 8px #00c853; }
+        .pos-eliminado { background-color: #d50000; box-shadow: 0 0 6px #d50000; }
         .pos-top19 { background-color: #00c853; box-shadow: 0 0 8px #00c853; }
         .pos-top32 { background-color: #ff9100; box-shadow: 0 0 8px #ff9100; }
         .pos-resto { background-color: #d50000; box-shadow: 0 0 6px #d50000; }
@@ -97,6 +108,11 @@
         .estado-competencia { color: #00ffb3; border: 1px solid #00ffb3; }
         .estado-eliminado { color: #ff5252; border: 1px solid #ff5252; }
         .estado-podio { color: #ffe600; border: 1px solid #ffe600; font-weight: bold; }
+        
+        /* Insignias Especiales de Puntos */
+        .estado-lider { background: #ffe600 !important; color: #000 !important; border: none !important; font-weight: bold !important; margin-left: 10px; box-shadow: 0 0 10px rgba(255, 230, 0, 0.5); }
+        .estado-bicampeon { background: linear-gradient(135deg, #ffe600, #ff5100) !important; color: #000 !important; border: none !important; font-weight: bold !important; margin-left: 10px; box-shadow: 0 0 12px rgba(255, 230, 0, 0.8); }
+        .estado-heredado { background: #00e5ff !important; color: #000 !important; border: none !important; font-weight: bold !important; margin-left: 10px; box-shadow: 0 0 10px rgba(0, 229, 255, 0.6); }
 
         .input-rep { width: 140px; padding: 4px 6px; background: rgba(0,0,0,0.8); border: 1px solid #ff9100; border-radius: 4px; color: #ff9100; font-size: 12px; outline: none; transition: 0.3s; }
         .input-rep:focus { box-shadow: 0 0 6px #ff9100; }
@@ -124,69 +140,22 @@
         .btn-toggle-admin:hover { filter: grayscale(0%); transform: scale(1.2); }
 
         @media (max-width: 600px) {
-            html, body { 
-                overflow-x: hidden; 
-            }
-            body { 
-                background-position: 50% center !important; 
-            }
-            .mega-titulo { 
-                font-size: clamp(25px, 11vw, 50px) !important; 
-                text-align: center !important; 
-                margin: 0 auto !important; 
-                width: 90%; 
-            }
-            .breadcrumb { 
-                text-align: center; 
-            }
-            .contenedor-mega-titulo { 
-                text-align: center !important; 
-                margin-left: 0 !important; 
-                width: 100% !important; 
-            }
-            
-            .grid-grupos, .grid-llaves { 
-                grid-template-columns: minmax(0, 1fr) !important; 
-                width: 100% !important;
-            }
-            
-            .contenedor-ronda { 
-                padding: 12px 6px !important; 
-                width: 98% !important; 
-            }
-            .tarjeta { 
-                padding: 10px 8px !important; 
-            }
-            .fila-participante { 
-                padding: 8px 6px !important; 
-                gap: 6px !important; 
-            }
-            
-            .pos-badge { 
-                margin-right: 0 !important; 
-                min-width: 38px !important; 
-                padding: 4px !important; 
-                font-size: 13px !important; 
-            }
-            .caja-votos { 
-                min-width: 65px !important; 
-            }
-            .input-votos { 
-                width: 65px !important; 
-                padding: 4px !important; 
-            }
-            .preview-puntos { 
-                font-size: 15px !important; 
-            }
-            .input-rep { 
-                width: 100% !important; 
-                max-width: 120px !important; 
-            }
-            
-            .btn-accion { 
-                width: 100%; 
-                margin-bottom: 10px; 
-            }
+            html, body { overflow-x: hidden; }
+            body { background-position: 50% center !important; }
+            .mega-titulo { font-size: clamp(25px, 11vw, 50px) !important; text-align: center !important; margin: 0 auto !important; width: 90%; }
+            .breadcrumb { text-align: center; }
+            .contenedor-mega-titulo { text-align: center !important; margin-left: 0 !important; width: 100% !important; }
+            .grid-grupos, .grid-llaves { grid-template-columns: minmax(0, 1fr) !important; width: 100% !important; }
+            .contenedor-ronda { padding: 12px 6px !important; width: 98% !important; }
+            .tarjeta { padding: 10px 8px !important; }
+            .fila-participante { padding: 8px 6px !important; gap: 6px !important; }
+            .pos-badge { margin-right: 0 !important; min-width: 38px !important; padding: 4px !important; font-size: 13px !important; }
+            .caja-votos { min-width: 65px !important; }
+            .input-votos { width: 65px !important; padding: 4px !important; }
+            .preview-puntos { font-size: 15px !important; }
+            .input-rep { width: 100% !important; max-width: 120px !important; }
+            .btn-accion { width: 100%; margin-bottom: 10px; }
+            .btn-cerrar-grupo { font-size: 11px; padding: 4px 6px; }
         }
     </style>
 
@@ -223,7 +192,7 @@
     </div>
 
     <div class="admin-controls" id="panel-admin">
-        <button id="btn-cerrar-fase" class="btn-accion">🚀 CERRAR FASE Y AVANZAR</button>
+        <button id="btn-cerrar-fase" class="btn-accion">🚀 CERRAR FASE DE GRUPOS Y CLASIFICAR (Top 32)</button>
         <button id="btn-resetear" class="btn-accion btn-peligro">⚠️ REINICIAR TORNEO</button>
     </div>
 
@@ -273,7 +242,6 @@
             }
         }
 
-        // Estructura base limpia: 19 grupos de 4 (76 participantes en total)
         function generarEstructuraBase() {
             return {
                 faseActual: "grupos",
@@ -282,25 +250,25 @@
                 llaves: {},
                 campeon: null,
                 grupos: [
-                    { id: "g1", nombre: "Estrellas: Clásicos y Brillantes", participantes: [ { id: "g1p1", nombre: "El Sol", votos: 0, representante: "" }, { id: "g1p2", nombre: "Betelgeuse", votos: 0, representante: "" }, { id: "g1p3", nombre: "Alfa Centauri A", votos: 0, representante: "" }, { id: "g1p4", nombre: "Polaris", votos: 0, representante: "" } ] },
-                    { id: "g2", nombre: "Estrellas: Titanes y Vecinos", participantes: [ { id: "g2p1", nombre: "Stephenson 2-18", votos: 0, representante: "" }, { id: "g2p2", nombre: "Arturo / Arcturus", votos: 0, representante: "" }, { id: "g2p3", nombre: "Alfa Centauri B", votos: 0, representante: "" }, { id: "g2p4", nombre: "Próxima Centauri", votos: 0, representante: "" } ] },
-                    { id: "g3", nombre: "Estrellas: Monstruos del Cosmos", participantes: [ { id: "g3p1", nombre: "UY Scuti", votos: 0, representante: "" }, { id: "g3p2", nombre: "Antares", votos: 0, representante: "" }, { id: "g3p3", nombre: "Eta Carinae", votos: 0, representante: "" }, { id: "g3p4", nombre: "Aldebarán", votos: 0, representante: "" } ] },
-                    { id: "g4", nombre: "Rocosos: Íntimos del Sol", participantes: [ { id: "g4p1", nombre: "Mercurio", votos: 0, representante: "" }, { id: "g4p2", nombre: "Venus", votos: 0, representante: "" }, { id: "g4p3", nombre: "La Tierra", votos: 0, representante: "" }, { id: "g4p4", nombre: "Marte", votos: 0, representante: "" } ] },
-                    { id: "g5", nombre: "Gaseosos: Gigantes del Sistema", participantes: [ { id: "g5p1", nombre: "Júpiter", votos: 0, representante: "" }, { id: "g5p2", nombre: "Saturno", votos: 0, representante: "" }, { id: "g5p3", nombre: "Urano", votos: 0, representante: "" }, { id: "g5p4", nombre: "Neptuno", votos: 0, representante: "" } ] },
-                    { id: "g6", nombre: "Hipotéticos: Los Fantasmas", participantes: [ { id: "g6p1", nombre: "Planeta X", votos: 0, representante: "" }, { id: "g6p2", nombre: "Vulcano", votos: 0, representante: "" }, { id: "g6p3", nombre: "Proto-Tierra", votos: 0, representante: "" }, { id: "g6p4", nombre: "Theia / Tea", votos: 0, representante: "" } ] },
-                    { id: "g7", nombre: "Errantes: Vagabundos del Vacío", participantes: [ { id: "g7p1", nombre: "PSO J318.5-22", votos: 0, representante: "" }, { id: "g7p2", nombre: "WISE 0855−0714", votos: 0, representante: "" }, { id: "g7p3", nombre: "SIMP J01365663", votos: 0, representante: "" }, { id: "g7p4", nombre: "OGLE-2016-BLG", votos: 0, representante: "" } ] },
-                    { id: "g8", nombre: "Exoplanetas: Maravillas Lejanas", participantes: [ { id: "g8p1", nombre: "Kepler-186f", votos: 0, representante: "" }, { id: "g8p2", nombre: "Próxima Centauri b", votos: 0, representante: "" }, { id: "g8p3", nombre: "Matusalén", votos: 0, representante: "" }, { id: "g8p4", nombre: "WASP-12b", votos: 0, representante: "" } ] },
-                    { id: "g9", nombre: "Lunas 1: Las Gigantes", participantes: [ { id: "g9p1", nombre: "Ganímedes", votos: 0, representante: "" }, { id: "g9p2", nombre: "Titán", votos: 0, representante: "" }, { id: "g9p3", nombre: "Calisto", votos: 0, representante: "" }, { id: "g9p4", nombre: "Ío", votos: 0, representante: "" } ] },
-                    { id: "g10", nombre: "Lunas 2: Clásicas y Misteriosas", participantes: [ { id: "g10p1", nombre: "La Luna", votos: 0, representante: "" }, { id: "g10p2", nombre: "Europa", votos: 0, representante: "" }, { id: "g10p3", nombre: "Encélado", votos: 0, representante: "" }, { id: "g10p4", nombre: "Tritón", votos: 0, representante: "" } ] },
-                    { id: "g11", nombre: "Lunas 3: Escuadrón de Saturno", participantes: [ { id: "g11p1", nombre: "Rea", votos: 0, representante: "" }, { id: "g11p2", nombre: "Jápeto", votos: 0, representante: "" }, { id: "g11p3", nombre: "Dione", votos: 0, representante: "" }, { id: "g11p4", nombre: "Tetis", votos: 0, representante: "" } ] },
-                    { id: "g12", nombre: "Lunas 4: Gélidas y Marcianas", participantes: [ { id: "g12p1", nombre: "Titania", votos: 0, representante: "" }, { id: "g12p2", nombre: "Oberón", votos: 0, representante: "" }, { id: "g12p3", nombre: "Ariel", votos: 0, representante: "" }, { id: "g12p4", nombre: "Fobos", votos: 0, representante: "" } ] },
-                    { id: "g13", nombre: "Lunas 5: Esféricas Pequeñas", participantes: [ { id: "g13p1", nombre: "Mimas", votos: 0, representante: "" }, { id: "g13p2", nombre: "Miranda", votos: 0, representante: "" }, { id: "g13p3", nombre: "Caronte", votos: 0, representante: "" }, { id: "g13p4", nombre: "Proteo", votos: 0, representante: "" } ] },
-                    { id: "g14", nombre: "Lunas 6: Irregulares y Agencia", participantes: [ { id: "g14p1", nombre: "Deimos", votos: 0, representante: "" }, { id: "g14p2", nombre: "Tebe", votos: 0, representante: "" }, { id: "g14p3", nombre: "Calícore", votos: 0, representante: "" }, { id: "g14p4", nombre: "La NASA", votos: 0, representante: "" } ] },
-                    { id: "g15", nombre: "Enanos 1: Reyes y Destronado", participantes: [ { id: "g15p1", nombre: "Plutón", votos: 0, representante: "" }, { id: "g15p2", nombre: "Ceres", votos: 0, representante: "" }, { id: "g15p3", nombre: "Eris", votos: 0, representante: "" }, { id: "g15p4", nombre: "Makemake", votos: 0, representante: "" } ] },
-                    { id: "g16", nombre: "Enanos 2: Extraños y Lejanos", participantes: [ { id: "g16p1", nombre: "Haumea", votos: 0, representante: "" }, { id: "g16p2", nombre: "Sedna", votos: 0, representante: "" }, { id: "g16p3", nombre: "Gonggong", votos: 0, representante: "" }, { id: "g16p4", nombre: "Quaoar", votos: 0, representante: "" } ] },
-                    { id: "g17", nombre: "Humanos 1: Protagonistas", participantes: [ { id: "g17p1", nombre: "Astrobola", votos: 0, representante: "" }, { id: "g17p2", nombre: "Cosmo", votos: 0, representante: "" }, { id: "g17p3", nombre: "El Jefe de Astrobola", votos: 0, representante: "" }, { id: "g17p4", nombre: "Sar", votos: 0, representante: "" } ] },
-                    { id: "g18", nombre: "Humanos y Naciones: Familia y Potencias", participantes: [ { id: "g18p1", nombre: "Junior", votos: 0, representante: "" }, { id: "g18p2", nombre: "Esposa de Astrobola", votos: 0, representante: "" }, { id: "g18p3", nombre: "Rusia", votos: 0, representante: "" }, { id: "g18p4", nombre: "Canadá", votos: 0, representante: "" } ] },
-                    { id: "g19", nombre: "Devoradores: Reyes del Vacío", participantes: [ { id: "g19p1", nombre: "TON 618", votos: 0, representante: "" }, { id: "g19p2", nombre: "Sagitario A*", votos: 0, representante: "" }, { id: "g19p3", nombre: "Phoenix A", votos: 0, representante: "" }, { id: "g19p4", nombre: "M87*", votos: 0, representante: "" } ] }
+                    { id: "g1", cerrado: false, nombre: "Estrellas: Clásicos y Brillantes", participantes: [ { id: "g1p1", nombre: "El Sol", votos: 0, representante: "" }, { id: "g1p2", nombre: "Betelgeuse", votos: 0, representante: "" }, { id: "g1p3", nombre: "Alfa Centauri A", votos: 0, representante: "" }, { id: "g1p4", nombre: "Polaris", votos: 0, representante: "" } ] },
+                    { id: "g2", cerrado: false, nombre: "Estrellas: Titanes y Vecinos", participantes: [ { id: "g2p1", nombre: "Stephenson 2-18", votos: 0, representante: "" }, { id: "g2p2", nombre: "Arturo / Arcturus", votos: 0, representante: "" }, { id: "g2p3", nombre: "Alfa Centauri B", votos: 0, representante: "" }, { id: "g2p4", nombre: "Próxima Centauri", votos: 0, representante: "" } ] },
+                    { id: "g3", cerrado: false, nombre: "Estrellas: Monstruos del Cosmos", participantes: [ { id: "g3p1", nombre: "UY Scuti", votos: 0, representante: "" }, { id: "g3p2", nombre: "Antares", votos: 0, representante: "" }, { id: "g3p3", nombre: "Eta Carinae", votos: 0, representante: "" }, { id: "g3p4", nombre: "Aldebarán", votos: 0, representante: "" } ] },
+                    { id: "g4", cerrado: false, nombre: "Rocosos: Íntimos del Sol", participantes: [ { id: "g4p1", nombre: "Mercurio", votos: 0, representante: "" }, { id: "g4p2", nombre: "Venus", votos: 0, representante: "" }, { id: "g4p3", nombre: "La Tierra", votos: 0, representante: "" }, { id: "g4p4", nombre: "Marte", votos: 0, representante: "" } ] },
+                    { id: "g5", cerrado: false, nombre: "Gaseosos: Gigantes del Sistema", participantes: [ { id: "g5p1", nombre: "Júpiter", votos: 0, representante: "" }, { id: "g5p2", nombre: "Saturno", votos: 0, representante: "" }, { id: "g5p3", nombre: "Urano", votos: 0, representante: "" }, { id: "g5p4", nombre: "Neptuno", votos: 0, representante: "" } ] },
+                    { id: "g6", cerrado: false, nombre: "Hipotéticos: Los Fantasmas", participantes: [ { id: "g6p1", nombre: "Planeta X", votos: 0, representante: "" }, { id: "g6p2", nombre: "Vulcano", votos: 0, representante: "" }, { id: "g6p3", nombre: "Proto-Tierra", votos: 0, representante: "" }, { id: "g6p4", nombre: "Theia / Tea", votos: 0, representante: "" } ] },
+                    { id: "g7", cerrado: false, nombre: "Errantes: Vagabundos del Vacío", participantes: [ { id: "g7p1", nombre: "PSO J318.5-22", votos: 0, representante: "" }, { id: "g7p2", nombre: "WISE 0855−0714", votos: 0, representante: "" }, { id: "g7p3", nombre: "SIMP J01365663", votos: 0, representante: "" }, { id: "g7p4", nombre: "OGLE-2016-BLG", votos: 0, representante: "" } ] },
+                    { id: "g8", cerrado: false, nombre: "Exoplanetas: Maravillas Lejanas", participantes: [ { id: "g8p1", nombre: "Kepler-186f", votos: 0, representante: "" }, { id: "g8p2", nombre: "Próxima Centauri b", votos: 0, representante: "" }, { id: "g8p3", nombre: "Matusalén", votos: 0, representante: "" }, { id: "g8p4", nombre: "WASP-12b", votos: 0, representante: "" } ] },
+                    { id: "g9", cerrado: false, nombre: "Lunas 1: Las Gigantes", participantes: [ { id: "g9p1", nombre: "Ganímedes", votos: 0, representante: "" }, { id: "g9p2", nombre: "Titán", votos: 0, representante: "" }, { id: "g9p3", nombre: "Calisto", votos: 0, representante: "" }, { id: "g9p4", nombre: "Ío", votos: 0, representante: "" } ] },
+                    { id: "g10", cerrado: false, nombre: "Lunas 2: Clásicas y Misteriosas", participantes: [ { id: "g10p1", nombre: "La Luna", votos: 0, representante: "" }, { id: "g10p2", nombre: "Europa", votos: 0, representante: "" }, { id: "g10p3", nombre: "Encélado", votos: 0, representante: "" }, { id: "g10p4", nombre: "Tritón", votos: 0, representante: "" } ] },
+                    { id: "g11", cerrado: false, nombre: "Lunas 3: Escuadrón de Saturno", participantes: [ { id: "g11p1", nombre: "Rea", votos: 0, representante: "" }, { id: "g11p2", nombre: "Jápeto", votos: 0, representante: "" }, { id: "g11p3", nombre: "Dione", votos: 0, representante: "" }, { id: "g11p4", nombre: "Tetis", votos: 0, representante: "" } ] },
+                    { id: "g12", cerrado: false, nombre: "Lunas 4: Gélidas y Marcianas", participantes: [ { id: "g12p1", nombre: "Titania", votos: 0, representante: "" }, { id: "g12p2", nombre: "Oberón", votos: 0, representante: "" }, { id: "g12p3", nombre: "Ariel", votos: 0, representante: "" }, { id: "g12p4", nombre: "Fobos", votos: 0, representante: "" } ] },
+                    { id: "g13", cerrado: false, nombre: "Lunas 5: Esféricas Pequeñas", participantes: [ { id: "g13p1", nombre: "Mimas", votos: 0, representante: "" }, { id: "g13p2", nombre: "Miranda", votos: 0, representante: "" }, { id: "g13p3", nombre: "Caronte", votos: 0, representante: "" }, { id: "g13p4", nombre: "Proteo", votos: 0, representante: "" } ] },
+                    { id: "g14", cerrado: false, nombre: "Lunas 6: Irregulares y Agencia", participantes: [ { id: "g14p1", nombre: "Deimos", votos: 0, representante: "" }, { id: "g14p2", nombre: "Tebe", votos: 0, representante: "" }, { id: "g14p3", nombre: "Calícore", votos: 0, representante: "" }, { id: "g14p4", nombre: "La NASA", votos: 0, representante: "" } ] },
+                    { id: "g15", cerrado: false, nombre: "Enanos 1: Reyes y Destronado", participantes: [ { id: "g15p1", nombre: "Plutón", votos: 0, representante: "" }, { id: "g15p2", nombre: "Ceres", votos: 0, representante: "" }, { id: "g15p3", nombre: "Eris", votos: 0, representante: "" }, { id: "g15p4", nombre: "Makemake", votos: 0, representante: "" } ] },
+                    { id: "g16", cerrado: false, nombre: "Enanos 2: Extraños y Lejanos", participantes: [ { id: "g16p1", nombre: "Haumea", votos: 0, representante: "" }, { id: "g16p2", nombre: "Sedna", votos: 0, representante: "" }, { id: "g16p3", nombre: "Gonggong", votos: 0, representante: "" }, { id: "g16p4", nombre: "Quaoar", votos: 0, representante: "" } ] },
+                    { id: "g17", cerrado: false, nombre: "Humanos 1: Protagonistas", participantes: [ { id: "g17p1", nombre: "Astrobola", votos: 0, representante: "" }, { id: "g17p2", nombre: "Cosmo", votos: 0, representante: "" }, { id: "g17p3", nombre: "El Jefe de Astrobola", votos: 0, representante: "" }, { id: "g17p4", nombre: "Sar", votos: 0, representante: "" } ] },
+                    { id: "g18", cerrado: false, nombre: "Humanos y Naciones: Familia y Potencias", participantes: [ { id: "g18p1", nombre: "Junior", votos: 0, representante: "" }, { id: "g18p2", nombre: "Esposa de Astrobola", votos: 0, representante: "" }, { id: "g18p3", nombre: "Rusia", votos: 0, representante: "" }, { id: "g18p4", nombre: "Canadá", votos: 0, representante: "" } ] },
+                    { id: "g19", cerrado: false, nombre: "Devoradores: Reyes del Vacío", participantes: [ { id: "g19p1", nombre: "TON 618", votos: 0, representante: "" }, { id: "g19p2", nombre: "Sagitario A*", votos: 0, representante: "" }, { id: "g19p3", nombre: "Phoenix A", votos: 0, representante: "" }, { id: "g19p4", nombre: "M87*", votos: 0, representante: "" } ] }
                 ]
             };
         }
@@ -329,26 +297,43 @@
         }
 
         /* ----------------------------------------------------
-           LÓGICA MATEMÁTICA: PUNTOS TOTALES Y ESTADOS
+           LÓGICA MATEMÁTICA: PUNTOS ACUMULADOS Y ESTADOS
         ---------------------------------------------------- */
         function calcularEstadisticasGlobales(torneo) {
             let stats = {};
             
-            // 1. Sumar Fase de Grupos
+            // 1. Sumar Fase de Grupos y definir estado inicial
             torneo.grupos.forEach(g => {
                 let totalG = g.participantes.reduce((sum, p) => sum + p.votos, 0);
-                g.participantes.forEach(p => {
+                
+                let ord = [...g.participantes].sort((a,b) => b.votos - a.votos);
+
+                ord.forEach((p, idx) => {
                     let pts = totalG > 0 ? Math.round((p.votos / totalG) * 1000) : 0;
+                    
+                    let estadoStr = "En competencia (Fase de Grupos)";
+                    
+                    if (torneo.faseActual === "grupos") {
+                        if (g.cerrado) {
+                            if (idx === 0) estadoStr = "En competencia (1.º de Grupo)";
+                            else if (idx === 1) estadoStr = "En competencia (Espera de repechaje)";
+                            else estadoStr = "Eliminado en Fase de Grupos";
+                        }
+                    } else {
+                        estadoStr = "Eliminado en Fase de Grupos";
+                    }
+
                     stats[p.id] = { 
-                        ...p, grupoNombre: g.nombre, puntosTotales: pts,
-                        estado: torneo.faseActual === "grupos" ? "En competencia (Grupos)" : "Eliminado en Fase de Grupos"
+                        ...p, grupoNombre: g.nombre, puntosTotales: pts, estado: estadoStr
                     };
                 });
             });
 
-            // 2. Sumar Fases Eliminatorias si ya cerraron los grupos
-            if (torneo.faseActual === "llaves") {
-                torneo.clasificados32.forEach(p => { if(stats[p.id]) stats[p.id].estado = "En competencia (16avos)"; });
+            // 2. Sumar Fases Eliminatorias
+            if (torneo.faseActual === "llaves" || torneo.campeon) {
+                torneo.clasificados32.forEach(p => { 
+                    if(stats[p.id]) stats[p.id].estado = "En competencia (16avos)"; 
+                });
 
                 const rondas = [32, 16, 8, 4, 2];
                 let perdedoresSemis = [];
@@ -360,8 +345,11 @@
                             let ptsP1 = totalD > 0 ? Math.round((d.votosP1 / totalD) * 1000) : 0;
                             let ptsP2 = totalD > 0 ? Math.round((d.votosP2 / totalD) * 1000) : 0;
                             
-                            if (stats[d.p1.id]) stats[d.p1.id].puntosTotales += ptsP1;
-                            if (stats[d.p2.id]) stats[d.p2.id].puntosTotales += ptsP2;
+                            // EXCLUSIÓN: La Final (ronda 2) no suma puntos.
+                            if (r > 2) {
+                                if (stats[d.p1.id]) stats[d.p1.id].puntosTotales += ptsP1;
+                                if (stats[d.p2.id]) stats[d.p2.id].puntosTotales += ptsP2;
+                            }
 
                             if (d.ganador) {
                                 let perdedorId = d.ganador.id === d.p1.id ? d.p2.id : d.p1.id;
@@ -389,7 +377,6 @@
                     }
                 });
 
-                // Determinar 3.er y 4.º lugar por puntos acumulados
                 if (perdedoresSemis.length === 2) {
                     perdedoresSemis.sort((a,b) => b.puntosTotales - a.puntosTotales);
                     perdedoresSemis[0].estado = "🥉 3.er Lugar";
@@ -410,7 +397,7 @@
 
             if (torneoGalactico.faseActual === "grupos") {
                 document.getElementById("titulo-estado").innerText = isAdmin ? "Fase de Grupos - ADMIN" : "Fase de Grupos - En Vivo";
-                btnCerrar.innerText = "🚀 CERRAR GRUPOS Y CLASIFICAR (Top 32)";
+                btnCerrar.innerText = "🚀 CERRAR TODOS LOS GRUPOS Y CLASIFICAR (Top 32)";
                 btnCerrar.style.display = "block";
             } else {
                 if (torneoGalactico.campeon) {
@@ -428,8 +415,9 @@
         }
 
         function getClaseEstado(estadoStr) {
-            if (estadoStr.includes("En competencia")) return "estado-competencia";
-            if (estadoStr.includes("Lugar") || estadoStr.includes("CAMPEÓN")) return "estado-podio";
+            if (estadoStr.includes("En competencia") || estadoStr.includes("CAMPEÓN") || estadoStr.includes("espera")) return "estado-competencia";
+            if (estadoStr.includes("Lugar")) return "estado-podio";
+            if (estadoStr.includes("Eliminado")) return "estado-eliminado";
             return "estado-eliminado";
         }
 
@@ -454,7 +442,7 @@
                 </div>`;
             }
 
-            // 2. Llaves Eliminatorias (De la Final hacia los 16avos)
+            // 2. Llaves Eliminatorias
             const rondas = [2, 4, 8, 16, 32];
             rondas.forEach(r => {
                 if (torneoGalactico.llaves[`ronda${r}`]) {
@@ -474,13 +462,17 @@
                         const colorP1 = llave.ganador && llave.ganador.id === llave.p1.id ? "#00ff22" : "#fff";
                         const colorP2 = llave.ganador && llave.ganador.id === llave.p2.id ? "#00ff22" : "#fff";
 
+                        // Si es la final (r=2), no muestra la etiqueta de "pts", solo los votos netos para no confundir
+                        const textoPts1 = r === 2 ? `${Math.round((llave.votosP1 / (totalDuelo||1))*100)}%` : `${pts1} pts`;
+                        const textoPts2 = r === 2 ? `${Math.round((llave.votosP2 / (totalDuelo||1))*100)}%` : `${pts2} pts`;
+
                         const cajaVotosP1 = isAdmin && isActiva 
-                            ? `<div class="caja-votos"><input type="number" class="input-votos" value="${llave.votosP1}" data-tipo="llave" data-ronda="${r}" data-llave="${llave.id}" data-target="votosP1"><span class="preview-puntos">${pts1} pts</span></div>`
-                            : `<div class="caja-votos"><span class="preview-puntos">${pts1} pts</span><span class="texto-votos-reales">(${llave.votosP1} votos)</span></div>`;
+                            ? `<div class="caja-votos"><input type="number" class="input-votos" value="${llave.votosP1}" data-tipo="llave" data-ronda="${r}" data-llave="${llave.id}" data-target="votosP1"><span class="preview-puntos">${textoPts1}</span></div>`
+                            : `<div class="caja-votos"><span class="preview-puntos">${textoPts1}</span><span class="texto-votos-reales">(${llave.votosP1} votos)</span></div>`;
 
                         const cajaVotosP2 = isAdmin && isActiva 
-                            ? `<div class="caja-votos"><input type="number" class="input-votos" value="${llave.votosP2}" data-tipo="llave" data-ronda="${r}" data-llave="${llave.id}" data-target="votosP2"><span class="preview-puntos">${pts2} pts</span></div>`
-                            : `<div class="caja-votos"><span class="preview-puntos">${pts2} pts</span><span class="texto-votos-reales">(${llave.votosP2} votos)</span></div>`;
+                            ? `<div class="caja-votos"><input type="number" class="input-votos" value="${llave.votosP2}" data-tipo="llave" data-ronda="${r}" data-llave="${llave.id}" data-target="votosP2"><span class="preview-puntos">${textoPts2}</span></div>`
+                            : `<div class="caja-votos"><span class="preview-puntos">${textoPts2}</span><span class="texto-votos-reales">(${llave.votosP2} votos)</span></div>`;
 
                         html += `
                             <div class="llave-duelo">
@@ -510,9 +502,30 @@
                 let ord = grupo.participantes.map(p => ({ ...p, pts: totalG > 0 ? Math.round((p.votos/totalG)*1000) : 0 }))
                                              .sort((a,b) => b.pts - a.pts);
 
-                html += `<div class="tarjeta"><h3 class="titulo-tarjeta">${grupo.nombre}</h3>`;
+                let btnCerrarHtml = (isAdmin && isGruposActiva && !grupo.cerrado) 
+                    ? `<button class="btn-cerrar-grupo" onclick="cerrarGrupoIndividual('${grupo.id}')">🔒 Cerrar Grupo</button>` 
+                    : '';
+                
+                let subTituloCerrado = grupo.cerrado 
+                    ? `<span style="color:#ff5252; font-size:13px; font-weight:bold; letter-spacing: 1px; margin-top: 5px;">🛑 ENCUESTA FINALIZADA</span>` 
+                    : '';
+
+                // Se quitó la clase 'grupo-cerrado' para que no opaque la tarjeta entera
+                html += `<div class="tarjeta">
+                         <div style="border-bottom: 2px solid #00ccff; padding-bottom: 8px; margin-bottom: 15px; display: flex; flex-direction: column;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3 class="titulo-tarjeta" style="border: none; padding: 0; margin: 0;">${grupo.nombre}</h3>
+                                ${btnCerrarHtml}
+                            </div>
+                            ${subTituloCerrado}
+                         </div>`;
+                         
                 ord.forEach((p, idx) => {
-                    const cajaVotos = (isAdmin && isGruposActiva)
+                    let isEliminadoDirecto = grupo.cerrado && idx >= 2;
+                    let estiloNombre = isEliminadoDirecto ? `text-decoration: line-through; color: #ff5252;` : ``;
+                    let badgeEliminado = isEliminadoDirecto ? `<span class="estado-tag estado-eliminado" style="margin-left: 6px;">Eliminado</span>` : ``;
+
+                    const cajaVotos = (isAdmin && isGruposActiva && !grupo.cerrado)
                         ? `<div class="caja-votos"><input type="number" class="input-votos" value="${p.votos}" data-tipo="grupo" data-grupo="${grupo.id}" data-pid="${p.id}"><span class="preview-puntos">${p.pts} pts</span></div>`
                         : `<div class="caja-votos"><span class="preview-puntos">${p.pts} pts</span><span class="texto-votos-reales">(${p.votos} votos)</span></div>`;
                     
@@ -521,7 +534,10 @@
                             <span class="pos-badge pos-${idx+1}">${idx+1}º</span>
                             <div class="info-participante">
                                 <div class="nombre-contenedor">
-                                    <span class="nombre">${p.nombre}</span>
+                                    <div style="display:flex; align-items:center; flex-wrap:wrap;">
+                                        <span class="nombre" style="${estiloNombre}">${p.nombre}</span>
+                                        ${badgeEliminado}
+                                    </div>
                                     ${getRepHtml({...p, grupoId: grupo.id})}
                                 </div>
                             </div>
@@ -536,32 +552,68 @@
             if (isAdmin) { asignarEventosInputsVotos(); asignarEventosInputsReps(); }
         }
 
-        // VISTA LISTA GLOBAL: 76 participantes
+        // VISTA LISTA GLOBAL: 76 participantes ordenados (Vivos arriba, Eliminados abajo)
         function renderizarListaGlobal76() {
             const contenedor = document.getElementById("contenedor-principal");
             const stats = calcularEstadisticasGlobales(torneoGalactico);
             let listaTodos = Object.values(stats);
 
-            listaTodos.sort((a, b) => b.puntosTotales - a.puntosTotales);
+            let idCampeon = torneoGalactico.campeon ? torneoGalactico.campeon.id : null;
+
+            // 1. Identificar Puestos por Puntos (para la herencia del premio)
+            let listaPorPuntos = [...listaTodos].sort((a,b) => b.puntosTotales - a.puntosTotales);
+            let idLiderPuntos = listaPorPuntos.length > 0 ? listaPorPuntos[0].id : null;
+            let idSegundoPuntos = listaPorPuntos.length > 1 ? listaPorPuntos[1].id : null;
+            
+            let esBicampeon = (idCampeon && idCampeon === idLiderPuntos);
+
+            // 2. Ordenamiento Visual: VIVOS primero, ELIMINADOS después. (Ordenados por puntos dentro de cada bloque)
+            listaTodos.sort((a, b) => {
+                let vivoA = a.estado.includes("competencia") || a.estado.includes("CAMPEÓN");
+                let vivoB = b.estado.includes("competencia") || b.estado.includes("CAMPEÓN");
+                
+                if (vivoA && !vivoB) return -1;
+                if (!vivoA && vivoB) return 1;
+                
+                return b.puntosTotales - a.puntosTotales;
+            });
 
             let html = `
             <div class="contenedor-lista-global">
-                <h3 class="titulo-tarjeta" style="font-size: 26px; margin-bottom: 20px;">RANKING GENERAL - 76 COMPETIDORES</h3>
+                <h3 class="titulo-tarjeta" style="font-size: 26px; margin-bottom: 20px;">RANKING GENERAL POR PUNTOS - 76 COMPETIDORES</h3>
             `;
 
             listaTodos.forEach((p, idx) => {
                 const pos = idx + 1;
-                let claseBadge = pos <= 19 ? "pos-top19" : pos <= 32 ? "pos-top32" : "pos-resto";
+                let vivo = p.estado.includes("competencia") || p.estado.includes("CAMPEÓN");
+                
+                let claseBadge = vivo ? "pos-vivo" : "pos-eliminado";
                 let claseEstado = getClaseEstado(p.estado);
+                
+                let etiquetaLider = "";
+
+                // Regla de Bicampeón y Premio Heredado
+                if (esBicampeon) {
+                    if (p.id === idCampeon && p.puntosTotales > 0) {
+                        etiquetaLider = `<span class="estado-tag estado-bicampeon">👑🏆 BICAMPEÓN (Torneo + Puntos)</span>`;
+                    } else if (p.id === idSegundoPuntos && p.puntosTotales > 0) {
+                        etiquetaLider = `<span class="estado-tag estado-heredado">🌟 2.º EN PUNTOS (Premio Heredado)</span>`;
+                    }
+                } else {
+                    if (p.id === idLiderPuntos && p.puntosTotales > 0) {
+                        etiquetaLider = `<span class="estado-tag estado-lider">🌟 LÍDER EN PUNTOS</span>`;
+                    }
+                }
 
                 html += `
                     <div class="fila-participante">
                         <span class="pos-badge ${claseBadge}">${pos}º</span>
                         <div class="info-participante">
                             <div class="nombre-contenedor">
-                                <div style="display:flex; align-items:center; flex-wrap: wrap;">
-                                    <span class="nombre">${p.nombre}</span>
+                                <div style="display:flex; align-items:center; flex-wrap: wrap; gap: 6px;">
+                                    <span class="nombre" style="${vivo ? '' : 'opacity:0.8;'}">${p.nombre}</span>
                                     <span class="tag-grupo">(${p.grupoNombre})</span>
+                                    ${etiquetaLider}
                                 </div>
                                 <span class="estado-tag ${claseEstado}">${p.estado}</span>
                                 ${getRepHtml(p)}
@@ -577,7 +629,7 @@
         }
 
         /* ----------------------------------------------------
-           EVENTOS: CÁLCULO EN VIVO Y GUARDADO EN LA NUBE
+           EVENTOS DE ACTUALIZACIÓN (ADMIN)
         ---------------------------------------------------- */
         function asignarEventosInputsVotos() {
             document.querySelectorAll(".input-votos").forEach(input => {
@@ -619,7 +671,14 @@
             inputsRelacionados.forEach(inp => total += (parseInt(inp.value)||0));
             inputsRelacionados.forEach(inp => {
                 let pts = total > 0 ? Math.round(((parseInt(inp.value)||0) / total) * 1000) : 0;
-                inp.parentElement.querySelector(".preview-puntos").innerText = `${pts} pts`;
+                // Si es la llave final (ronda 2) mostrar % en lugar de puntos
+                let r = inp.getAttribute("data-ronda");
+                if(r && parseInt(r) === 2) {
+                    let pct = total > 0 ? Math.round(((parseInt(inp.value)||0) / total) * 100) : 0;
+                    inp.parentElement.querySelector(".preview-puntos").innerText = `${pct}%`;
+                } else {
+                    inp.parentElement.querySelector(".preview-puntos").innerText = `${pts} pts`;
+                }
             });
         }
 
@@ -640,12 +699,28 @@
         /* ----------------------------------------------------
            CERRAR FASE: CIERRE DE GRUPOS Y DESEMPATES
         ---------------------------------------------------- */
+        window.cerrarGrupoIndividual = function(grupoId) {
+            if(confirm("¿Seguro que deseas cerrar este grupo? Ya no se podrán sumar votos y los lugares 3º y 4º quedarán eliminados matemáticamente.")) {
+                let g = torneoGalactico.grupos.find(x => x.id === grupoId);
+                if(g) { 
+                    g.cerrado = true; 
+                    guardarDatosEnNube(); 
+                }
+            }
+        }
+
         document.getElementById("btn-cerrar-fase").addEventListener("click", () => {
             if (torneoGalactico.faseActual === "grupos") cerrarFaseGrupos();
             else avanzarRondaLlaves();
         });
 
         function cerrarFaseGrupos() {
+            let gruposAbiertos = torneoGalactico.grupos.filter(g => !g.cerrado);
+            if (gruposAbiertos.length > 0) {
+                if(!confirm(`Aún hay ${gruposAbiertos.length} grupos abiertos.\n¿Deseas cerrarlos TODOS forzosamente para generar las llaves finales?`)) return;
+                gruposAbiertos.forEach(g => g.cerrado = true);
+            }
+
             let directos = [];
             let todosLosSegundos = [];
 
@@ -665,7 +740,7 @@
                 if (calculados.length > 1) todosLosSegundos.push(calculados[1]);
             });
 
-            // Ordenar los 2dos lugares por Puntos y luego por Brecha sobre el 3ero
+            // Ordenar los 2dos lugares por Puntos y luego por Brecha
             todosLosSegundos.sort((a, b) => {
                 if(b.ptsCalc !== a.ptsCalc) return b.ptsCalc - a.ptsCalc;
                 return b.brecha - a.brecha; 
@@ -676,7 +751,7 @@
 
             if (directos.length + mejoresSegundos.length !== 32) return alert("Error: No se lograron 32 finalistas.");
 
-            if (confirm("🌌 FASE DE GRUPOS CONCLUIDA.\nSe calcularon los puntos normalizados. ¿Generar llaves eliminatorias aleatorias?")) {
+            if (confirm("🌌 TODOS LOS GRUPOS CERRADOS.\nSe calcularon los puntos para desempatar a los segundos lugares.\n¿Generar llaves eliminatorias definitivas?")) {
                 const finalistasLimpios = [...directos, ...mejoresSegundos].map(f => {
                     let clean = {...f}; delete clean.ptsCalc; delete clean.brecha; return clean;
                 });
