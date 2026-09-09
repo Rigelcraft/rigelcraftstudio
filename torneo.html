@@ -510,7 +510,6 @@
                     ? `<span style="color:#ff5252; font-size:13px; font-weight:bold; letter-spacing: 1px; margin-top: 5px;">🛑 ENCUESTA FINALIZADA</span>` 
                     : '';
 
-                // Se quitó la clase 'grupo-cerrado' para que no opaque la tarjeta entera
                 html += `<div class="tarjeta">
                          <div style="border-bottom: 2px solid #00ccff; padding-bottom: 8px; margin-bottom: 15px; display: flex; flex-direction: column;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -587,7 +586,14 @@
                 const pos = idx + 1;
                 let vivo = p.estado.includes("competencia") || p.estado.includes("CAMPEÓN");
                 
-                let claseBadge = vivo ? "pos-vivo" : "pos-eliminado";
+                // Asignación de colores por rango: 1-19 verde, 20-32 naranja, 33+ rojo
+                let claseBadge = "pos-resto";
+                if (pos <= 19) {
+                    claseBadge = "pos-top19";
+                } else if (pos <= 32) {
+                    claseBadge = "pos-top32";
+                }
+
                 let claseEstado = getClaseEstado(p.estado);
                 
                 let etiquetaLider = "";
@@ -671,7 +677,6 @@
             inputsRelacionados.forEach(inp => total += (parseInt(inp.value)||0));
             inputsRelacionados.forEach(inp => {
                 let pts = total > 0 ? Math.round(((parseInt(inp.value)||0) / total) * 1000) : 0;
-                // Si es la llave final (ronda 2) mostrar % en lugar de puntos
                 let r = inp.getAttribute("data-ronda");
                 if(r && parseInt(r) === 2) {
                     let pct = total > 0 ? Math.round(((parseInt(inp.value)||0) / total) * 100) : 0;
@@ -740,13 +745,11 @@
                 if (calculados.length > 1) todosLosSegundos.push(calculados[1]);
             });
 
-            // Ordenar los 2dos lugares por Puntos y luego por Brecha
             todosLosSegundos.sort((a, b) => {
                 if(b.ptsCalc !== a.ptsCalc) return b.ptsCalc - a.ptsCalc;
                 return b.brecha - a.brecha; 
             });
 
-            // Con 19 grupos: 19 primeros + 13 mejores segundos = 32 clasificados
             const mejoresSegundos = todosLosSegundos.slice(0, 13);
 
             if (directos.length + mejoresSegundos.length !== 32) return alert("Error: No se lograron 32 finalistas.");
