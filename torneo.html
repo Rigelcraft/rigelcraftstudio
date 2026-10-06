@@ -77,7 +77,7 @@
         .tarjeta { background: rgba(0, 0, 0, 0.85); border: 2px solid #00ccff; border-radius: 12px; padding: 18px; box-shadow: 0 0 12px rgba(0, 204, 255, 0.3); transition: transform 0.3s; }
         .tarjeta:hover { box-shadow: 0 0 22px rgba(0, 204, 255, 0.6); transform: translateY(-3px); }
         
-        /* Botón para cerrar grupos */
+        /* Botones para cerrar grupos y enfrentamientos */
         .btn-cerrar-grupo { background: rgba(213,0,0,0.2); color: #ff5252; border: 1px solid #ff5252; padding: 6px 10px; border-radius: 6px; cursor: pointer; float: right; font-size: 13px; font-weight: bold; transition: 0.3s; }
         .btn-cerrar-grupo:hover { background: #d50000; color: #fff; }
 
@@ -91,7 +91,7 @@
         .pos-2 { background-color: #ff9100; box-shadow: 0 0 8px #ff9100; }
         .pos-3, .pos-4 { background-color: #d50000; box-shadow: 0 0 6px #d50000; }
         
-        /* Colores para el Ranking Global */
+        /* Colores para el Ranking Global Dinámico */
         .pos-vivo { background-color: #00c853; box-shadow: 0 0 8px #00c853; }
         .pos-eliminado { background-color: #d50000; box-shadow: 0 0 6px #d50000; }
         .pos-top19 { background-color: #00c853; box-shadow: 0 0 8px #00c853; }
@@ -127,7 +127,7 @@
         .titulo-ronda { color: #ffe600; text-align: center; font-size: 30px; text-shadow: 0 0 10px #000; margin-bottom: 20px; }
         .grid-llaves { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .llave-duelo { background: linear-gradient(180deg, rgba(0,20,50,0.9) 0%, rgba(0,0,0,0.95) 100%); border: 2px solid #00c3ff; border-radius: 10px; padding: 15px; position: relative; }
-        .vs-badge { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff0000; color: #fff; font-weight: bold; font-size: 12px; padding: 4px 8px; border-radius: 20px; box-shadow: 0 0 10px #ff0000; }
+        .vs-badge { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff0000; color: #fff; font-weight: bold; font-size: 12px; padding: 4px 8px; border-radius: 20px; box-shadow: 0 0 10px #ff0000; z-index: 5; }
 
         .admin-controls { display: none; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 40px auto; width: 96%; }
         .btn-accion { background: linear-gradient(135deg, #00c3ff, #0051ff); color: #fff; font-family: 'Anton', Arial, sans-serif; font-size: clamp(16px, 3vw, 22px); padding: 15px 30px; border: 2px solid #00fff2; border-radius: 10px; cursor: pointer; box-shadow: 0 0 15px rgba(0, 204, 255, 0.5); transition: 0.3s; letter-spacing: 1px; }
@@ -159,7 +159,6 @@
         }
     </style>
 
-    <!-- SDKs DE FIREBASE -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -296,9 +295,6 @@
             renderizarApp();
         }
 
-        /* ----------------------------------------------------
-           LÓGICA MATEMÁTICA: PUNTOS ACUMULADOS Y ESTADOS
-        ---------------------------------------------------- */
         function calcularEstadisticasGlobales(torneo) {
             let stats = {};
             
@@ -324,7 +320,7 @@
                     }
 
                     stats[p.id] = { 
-                        ...p, grupoNombre: g.nombre, puntosTotales: pts, estado: estadoStr
+                        ...p, grupoNombre: g.nombre, puntosTotales: pts, estado: estadoStr, perdiendoMatch: false
                     };
                 });
             });
@@ -345,13 +341,13 @@
                             let ptsP1 = totalD > 0 ? Math.round((d.votosP1 / totalD) * 1000) : 0;
                             let ptsP2 = totalD > 0 ? Math.round((d.votosP2 / totalD) * 1000) : 0;
                             
-                            // EXCLUSIÓN: La Final (ronda 2) no suma puntos.
+                            // EXCLUSIÓN: La Final (ronda 2) no suma puntos globales.
                             if (r > 2) {
                                 if (stats[d.p1.id]) stats[d.p1.id].puntosTotales += ptsP1;
                                 if (stats[d.p2.id]) stats[d.p2.id].puntosTotales += ptsP2;
                             }
 
-                            if (d.ganador) {
+                            if (d.ganador) { // EL ENFRENTAMIENTO FUE CERRADO
                                 let perdedorId = d.ganador.id === d.p1.id ? d.p2.id : d.p1.id;
                                 let ganadorId = d.ganador.id;
                                 
@@ -368,10 +364,21 @@
                                     let nomSig = r===32 ? "Octavos" : r===16 ? "Cuartos" : r===8 ? "Semifinales" : "Final";
                                     stats[ganadorId].estado = `En competencia (${nomSig})`;
                                 }
-                            } else {
+                                
+                                // Ya no están en un duelo en vivo, reseteamos el flag de peligro
+                                stats[perdedorId].perdiendoMatch = false;
+                                stats[ganadorId].perdiendoMatch = false;
+                                
+                            } else { // EL ENFRENTAMIENTO SIGUE VIVO
                                 let nomAct = r===32 ? "16avos" : r===16 ? "Octavos" : r===8 ? "Cuartos" : r===4 ? "Semifinales" : "Final";
-                                if(stats[d.p1.id]) stats[d.p1.id].estado = `En competencia (${nomAct})`;
-                                if(stats[d.p2.id]) stats[d.p2.id].estado = `En competencia (${nomAct})`;
+                                if(stats[d.p1.id]) {
+                                    stats[d.p1.id].estado = `En competencia (${nomAct})`;
+                                    stats[d.p1.id].perdiendoMatch = d.votosP2 > d.votosP1; // Lógica de peligro (naranja)
+                                }
+                                if(stats[d.p2.id]) {
+                                    stats[d.p2.id].estado = `En competencia (${nomAct})`;
+                                    stats[d.p2.id].perdiendoMatch = d.votosP1 > d.votosP2; // Lógica de peligro (naranja)
+                                }
                             }
                         });
                     }
@@ -380,15 +387,12 @@
                 if (perdedoresSemis.length === 2) {
                     perdedoresSemis.sort((a,b) => b.puntosTotales - a.puntosTotales);
                     perdedoresSemis[0].estado = "🥉 3.er Lugar";
-                    perdedoresSemis[1].estado = "Eliminado en Semifinales (4.º Lugar)";
+                    perdedoresSemis[1].estado = "Eliminado en Semifinales (4.º Lugar)"; // Pasa a ser eliminado
                 }
             }
             return stats;
         }
 
-        /* ----------------------------------------------------
-           RENDERIZADO Y ESTRUCTURA DE LA PÁGINA
-        ---------------------------------------------------- */
         function renderizarApp() {
             const panelAdmin = document.getElementById("panel-admin");
             const btnCerrar = document.getElementById("btn-cerrar-fase");
@@ -466,17 +470,27 @@
                         const textoPts1 = r === 2 ? `${Math.round((llave.votosP1 / (totalDuelo||1))*100)}%` : `${pts1} pts`;
                         const textoPts2 = r === 2 ? `${Math.round((llave.votosP2 / (totalDuelo||1))*100)}%` : `${pts2} pts`;
 
-                        const cajaVotosP1 = isAdmin && isActiva 
+                        let btnCerrarLlaveHtml = (isAdmin && isActiva && !llave.ganador) 
+                            ? `<div style="text-align: right; margin-bottom: 15px;"><button class="btn-cerrar-grupo" style="float: none; display: inline-block;" onclick="cerrarLlaveIndividual(${r}, '${llave.id}')">🔒 Cerrar Enfrentamiento</button></div>` 
+                            : '';
+                        
+                        let subTituloCerradoLlave = llave.ganador 
+                            ? `<div style="text-align: center; color:#ff5252; font-size:12px; font-weight:bold; margin-bottom: 15px; letter-spacing: 1px;">🛑 ENFRENTAMIENTO CERRADO</div>` 
+                            : '';
+
+                        const cajaVotosP1 = isAdmin && isActiva && !llave.ganador 
                             ? `<div class="caja-votos"><input type="number" class="input-votos" value="${llave.votosP1}" data-tipo="llave" data-ronda="${r}" data-llave="${llave.id}" data-target="votosP1"><span class="preview-puntos">${textoPts1}</span></div>`
                             : `<div class="caja-votos"><span class="preview-puntos">${textoPts1}</span><span class="texto-votos-reales">(${llave.votosP1} votos)</span></div>`;
 
-                        const cajaVotosP2 = isAdmin && isActiva 
+                        const cajaVotosP2 = isAdmin && isActiva && !llave.ganador
                             ? `<div class="caja-votos"><input type="number" class="input-votos" value="${llave.votosP2}" data-tipo="llave" data-ronda="${r}" data-llave="${llave.id}" data-target="votosP2"><span class="preview-puntos">${textoPts2}</span></div>`
                             : `<div class="caja-votos"><span class="preview-puntos">${textoPts2}</span><span class="texto-votos-reales">(${llave.votosP2} votos)</span></div>`;
 
                         html += `
                             <div class="llave-duelo">
                                 <div class="vs-badge">VS</div>
+                                ${btnCerrarLlaveHtml}
+                                ${subTituloCerradoLlave}
                                 <div class="fila-participante" style="margin-bottom: 25px;">
                                     <div class="info-participante"><span class="nombre" style="color: ${colorP1}">${llave.p1.nombre}</span></div>
                                     ${cajaVotosP1}
@@ -551,7 +565,6 @@
             if (isAdmin) { asignarEventosInputsVotos(); asignarEventosInputsReps(); }
         }
 
-        // VISTA LISTA GLOBAL: 76 participantes ordenados (Vivos arriba, Eliminados abajo)
         function renderizarListaGlobal76() {
             const contenedor = document.getElementById("contenedor-principal");
             const stats = calcularEstadisticasGlobales(torneoGalactico);
@@ -566,36 +579,61 @@
             
             let esBicampeon = (idCampeon && idCampeon === idLiderPuntos);
 
-            // 2. Ordenamiento Visual: VIVOS primero, ELIMINADOS después. (Ordenados por puntos dentro de cada bloque)
+            // 2. Ordenamiento Visual: PESOS INVISIBLES Y LUEGO PUNTOS
             listaTodos.sort((a, b) => {
-                let vivoA = a.estado.includes("competencia") || a.estado.includes("CAMPEÓN");
-                let vivoB = b.estado.includes("competencia") || b.estado.includes("CAMPEÓN");
-                
-                if (vivoA && !vivoB) return -1;
-                if (!vivoA && vivoB) return 1;
-                
+                function getPeso(p) {
+                    if (p.estado.includes("CAMPEÓN")) return 5;
+                    if (p.estado.includes("2.º Lugar") || p.estado.includes("Subcampeón")) return 4;
+                    if (p.estado.includes("3.er Lugar")) return 3;
+                    if (p.estado.includes("competencia") || p.estado.includes("espera")) return 2;
+                    return 1; // Eliminados
+                }
+
+                let pesoA = getPeso(a);
+                let pesoB = getPeso(b);
+
+                // Si pertenecen a distinta categoría invisible, el de mayor jerarquía va arriba
+                if (pesoA !== pesoB) {
+                    return pesoB - pesoA;
+                }
+
+                // Si pertenecen a la MISMA categoría, desempatan estrictamente por puntos
                 return b.puntosTotales - a.puntosTotales;
             });
 
             let html = `
             <div class="contenedor-lista-global">
-                <h3 class="titulo-tarjeta" style="font-size: 26px; margin-bottom: 20px;">RANKING GENERAL POR PUNTOS - 76 COMPETIDORES</h3>
+                <h3 class="titulo-tarjeta" style="font-size: 26px; margin-bottom: 20px; text-align: center; text-transform: uppercase;">RANKING GENERAL DEL TORNEO (76)</h3>
             `;
 
             listaTodos.forEach((p, idx) => {
                 const pos = idx + 1;
                 let vivo = p.estado.includes("competencia") || p.estado.includes("CAMPEÓN");
                 
-                // Asignación de colores por rango: 1-19 verde, 20-32 naranja, 33+ rojo
+                // ASIGNACIÓN DINÁMICA DE COLORES
                 let claseBadge = "pos-resto";
-                if (pos <= 19) {
-                    claseBadge = "pos-top19";
-                } else if (pos <= 32) {
-                    claseBadge = "pos-top32";
+                
+                if (torneoGalactico.faseActual === "grupos") {
+                    // Si estamos en Fase de Grupos
+                    if (pos <= 19) claseBadge = "pos-top19";
+                    else if (pos <= 32) claseBadge = "pos-top32";
+                    
+                    if (p.estado.includes("Eliminado")) claseBadge = "pos-eliminado";
+                } else {
+                    // Si ya estamos en las Eliminatorias (16avos, Octavos, etc.)
+                    if (vivo) {
+                        if (p.perdiendoMatch) claseBadge = "pos-top32"; // Va perdiendo = Naranja
+                        else claseBadge = "pos-vivo"; // Va ganando o empatando = Verde
+                    } else {
+                        claseBadge = "pos-eliminado"; // Eliminado = Rojo
+                    }
+                    // Si es subcampeón o tercer lugar (Podio final)
+                    if (p.estado.includes("2.º Lugar") || p.estado.includes("3.er Lugar")) {
+                        claseBadge = "pos-top32"; 
+                    }
                 }
 
                 let claseEstado = getClaseEstado(p.estado);
-                
                 let etiquetaLider = "";
 
                 // Regla de Bicampeón y Premio Heredado
@@ -634,9 +672,6 @@
             if (isAdmin) asignarEventosInputsReps();
         }
 
-        /* ----------------------------------------------------
-           EVENTOS DE ACTUALIZACIÓN (ADMIN)
-        ---------------------------------------------------- */
         function asignarEventosInputsVotos() {
             document.querySelectorAll(".input-votos").forEach(input => {
                 input.addEventListener("input", (e) => actualizarPuntosVisuales(e.target));
@@ -711,6 +746,19 @@
                     g.cerrado = true; 
                     guardarDatosEnNube(); 
                 }
+            }
+        }
+
+        // FUNCIÓN PARA CERRAR UN ENFRENTAMIENTO INDIVIDUAL (BOTÓN NUEVO DE LLAVES)
+        window.cerrarLlaveIndividual = function(ronda, llaveId) {
+            let llave = torneoGalactico.llaves[`ronda${ronda}`].find(l => l.id === llaveId);
+            if (!llave) return;
+            if (llave.votosP1 === llave.votosP2 && (llave.votosP1 > 0 || llave.votosP2 > 0)) {
+                return alert("⚠️️ No puedes cerrar un enfrentamiento que se encuentra en empate. Resuélvelo primero.");
+            }
+            if (confirm("¿Cerrar definitivamente este enfrentamiento?\nEl perdedor será eliminado del torneo y su color cambiará a rojo en el ranking global. Sus puntos quedarán guardados.")) {
+                llave.ganador = llave.votosP1 > llave.votosP2 ? llave.p1 : llave.p2;
+                guardarDatosEnNube();
             }
         }
 
@@ -789,15 +837,22 @@
             const rActiva = torneoGalactico.rondaLlavesActiva;
             const duelos = torneoGalactico.llaves[`ronda${rActiva}`];
 
-            for (let duelo of duelos) {
-                if (duelo.votosP1 === duelo.votosP2 && (duelo.votosP1 > 0 || duelo.votosP2 > 0)) {
-                    return alert(`⚠️ EMPATE DETECTADO entre ${duelo.p1.nombre} y ${duelo.p2.nombre}.`);
+            // Validar si quedan enfrentamientos sin cerrar
+            let duelosAbiertos = duelos.filter(d => !d.ganador);
+            if (duelosAbiertos.length > 0) {
+                if (!confirm(`Aún hay ${duelosAbiertos.length} enfrentamientos abiertos en esta ronda.\n¿Deseas cerrarlos TODOS y avanzar de ronda?`)) return;
+                
+                for (let duelo of duelosAbiertos) {
+                    if (duelo.votosP1 === duelo.votosP2 && (duelo.votosP1 > 0 || duelo.votosP2 > 0)) {
+                        return alert(`⚠️ EMPATE DETECTADO entre ${duelo.p1.nombre} y ${duelo.p2.nombre}. No se puede avanzar hasta resolverlo.`);
+                    }
+                    duelo.ganador = duelo.votosP1 > duelo.votosP2 ? duelo.p1 : duelo.p2;
                 }
+            } else {
+                if (!confirm(`¿Confirmar avance a la siguiente ronda con los ganadores actuales?`)) return;
             }
 
-            if (!confirm(`¿Confirmar cierre de la Ronda de ${rActiva} y avanzar a los ganadores?`)) return;
-
-            const ganadores = duelos.map(d => { d.ganador = d.votosP1 > d.votosP2 ? d.p1 : d.p2; return d.ganador; });
+            const ganadores = duelos.map(d => d.ganador);
             const sigRondaNum = rActiva / 2;
 
             if (sigRondaNum < 1) {
