@@ -116,6 +116,21 @@
         .btn-cancelar { width: 100%; background: transparent; color: #ff5252; border: 2px solid #ff5252; font-size: 18px; padding: 10px; border-radius: 8px; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         .btn-cancelar:hover { background: #ff5252; color: #fff; }
 
+        /* NOTIFICACIONES Y AVISOS VISUALES */
+        .notificacion-flotante {
+            display: none; position: fixed; bottom: 25px; right: 25px; z-index: 4000;
+            padding: 16px 24px; border-radius: 10px; font-weight: bold; font-size: 16px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8); transition: all 0.3s ease; max-width: 90%;
+        }
+        .notif-exito { background: rgba(0, 40, 10, 0.95); border: 2px solid #00ff22; color: #00ff22; text-shadow: 0 0 5px #000; }
+        .notif-error { background: rgba(40, 0, 0, 0.95); border: 2px solid #ff5252; color: #ff5252; text-shadow: 0 0 5px #000; }
+        .notif-info { background: rgba(0, 20, 40, 0.95); border: 2px solid #00eeff; color: #00eeff; text-shadow: 0 0 5px #000; }
+
+        .alerta-storage {
+            display: none; margin-top: 15px; padding: 12px; background: rgba(255, 82, 82, 0.15);
+            border: 1px solid #ff5252; border-radius: 8px; font-size: 14px; color: #ff9e9e; line-height: 1.4;
+        }
+
         /* VISOR DE IMÁGENES PANTALLA COMPLETA */
         .modal-img { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); cursor: pointer; }
         .modal-img-content { display: block; max-width: 95%; max-height: 95%; margin: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 4px solid #00eeff; border-radius: 10px; box-shadow: 0 0 30px #00eeff; }
@@ -248,14 +263,20 @@
             <div class="form-group">
                 <label>Subir Imagen del Trofeo:</label>
                 <input type="file" id="form-file" class="form-input" accept="image/*" style="margin-bottom: 10px;">
-                <label style="font-size: 14px; color: #aaa;">O pega un enlace de internet (URL):</label>
-                <input type="text" id="form-link" class="form-input" placeholder="https://ejemplo.com/imagen.png">
+                <label style="font-size: 14px; color: #aaa;">O pega un enlace de internet directo (URL de imagen):</label>
+                <input type="text" id="form-link" class="form-input" placeholder="https://i.ibb.co/ejemplo.png o https://raw.githubusercontent.com/...">
+                <div id="alerta-error-storage" class="alerta-storage">
+                    ⚠️ <strong>Error de subida a Storage (CORS / Permisos):</strong> Firebase Storage bloqueó la subida directa del archivo. Puedes pegar un enlace directo de internet en el campo de arriba para publicarlo inmediatamente sin depender de Storage.
+                </div>
             </div>
 
             <button class="btn-guardar" id="btn-guardar-trofeo" onclick="guardarTrofeo()">🚀 PUBLICAR EN EL SALÓN</button>
             <button class="btn-cancelar" onclick="cerrarModalAñadir()">Cancelar</button>
         </div>
     </div>
+
+    <!-- NOTIFICACIÓN EN PANTALLA -->
+    <div id="toast-notificacion" class="notificacion-flotante"></div>
 
     <script>
         // CONFIGURACIÓN FIREBASE
@@ -278,6 +299,14 @@
         let categoriaFiltroActual = 'todos';
         let categoriasGuardadas = [];
 
+        function mostrarMensaje(texto, tipo = "info") {
+            const toast = document.getElementById("toast-notificacion");
+            toast.className = `notificacion-flotante notif-${tipo}`;
+            toast.innerText = texto;
+            toast.style.display = "block";
+            setTimeout(() => { toast.style.display = "none"; }, 4500);
+        }
+
         // AUTENTICACIÓN ADMIN
         auth.onAuthStateChanged((user) => {
             isAdmin = !!user;
@@ -288,12 +317,12 @@
 
         function solicitarAccesoAdmin() {
             if (isAdmin) {
-                auth.signOut().then(() => alert("🔒 Sesión cerrada. Modo Público activo."));
+                auth.signOut().then(() => mostrarMensaje("🔒 Sesión cerrada. Modo Público activo.", "info"));
             } else {
                 const provider = new firebase.auth.GoogleAuthProvider();
                 auth.signInWithPopup(provider)
-                    .then((result) => alert(`🔓 Bienvenido, ${result.user.displayName}. Modo Administrador activo.`))
-                    .catch((error) => alert("❌ Error de inicio de sesión."));
+                    .then((result) => mostrarMensaje(`🔓 Bienvenido, ${result.user.displayName}. Modo Administrador activo.`, "exito"))
+                    .catch((error) => mostrarMensaje("❌ Error de inicio de sesión con Google.", "error"));
             }
         }
 
@@ -451,6 +480,7 @@
 
         function cerrarModalAñadir() {
             modalForm.style.display = "none";
+            document.getElementById("alerta-error-storage").style.display = "none";
             document.getElementById("btn-guardar-trofeo").innerText = "🚀 PUBLICAR EN EL SALÓN";
             document.getElementById("btn-guardar-trofeo").disabled = false;
         }
@@ -480,6 +510,8 @@
             const anio = document.getElementById('form-anio').value.trim();
             const fecha = document.getElementById('form-fecha').value;
             const desc = document.getElementById('form-desc').value.trim();
+            const alertaStorage = document.getElementById("alerta-error-storage");
+            alertaStorage.style.display = "none";
             
             // Resolver Categoría
             const selectCat = document.getElementById('form-categoria-select').value;
@@ -489,7 +521,7 @@
             if (selectCat === 'custom') {
                 categoriaFinal = document.getElementById('form-categoria-custom').value.trim();
                 guardarCatEnDB = document.getElementById('form-guardar-categoria').checked;
-                if(!categoriaFinal) return alert("⚠️ Escribe el nombre de la nueva categoría.");
+                if(!categoriaFinal) return mostrarMensaje("⚠️ Escribe el nombre de la nueva categoría.", "error");
             }
 
             // Resolver Título
@@ -500,29 +532,39 @@
             const archivoLink = document.getElementById('form-link').value.trim();
 
             if (!anio || !tituloBase || !desc) {
-                return alert("⚠️ Por favor, llena todos los campos de texto.");
+                return mostrarMensaje("⚠️ Por favor, llena todos los campos de texto.", "error");
             }
             if (!archivoFile && !archivoLink) {
-                return alert("⚠️ Debes subir una imagen o pegar un enlace URL.");
+                return mostrarMensaje("⚠️ Debes seleccionar un archivo o ingresar una URL de imagen.", "error");
             }
 
             const btn = document.getElementById("btn-guardar-trofeo");
-            btn.innerText = "⏳ Subiendo y guardando...";
+            btn.innerText = "⏳ Guardando información...";
             btn.disabled = true;
 
             try {
                 let imgUrlDestino = "";
 
-                // Prioriza archivo físico a Firebase Storage
-                if (archivoFile) {
-                    const storageRef = storage.ref(`salon_fama/${Date.now()}_${archivoFile.name}`);
-                    await storageRef.put(archivoFile);
-                    imgUrlDestino = await storageRef.getDownloadURL();
-                } else {
+                // Si pegó enlace directo, se prioriza o usa sin tocar Storage
+                if (archivoLink) {
                     imgUrlDestino = archivoLink;
+                } else if (archivoFile) {
+                    btn.innerText = "⏳ Subiendo archivo a Storage...";
+                    try {
+                        const nombreLimpio = archivoFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                        const storageRef = storage.ref(`salon_fama/${Date.now()}_${nombreLimpio}`);
+                        await storageRef.put(archivoFile);
+                        imgUrlDestino = await storageRef.getDownloadURL();
+                    } catch (storageErr) {
+                        console.error("Fallo específico de Storage / CORS:", storageErr);
+                        alertaStorage.style.display = "block";
+                        btn.innerText = "🚀 PUBLICAR EN EL SALÓN";
+                        btn.disabled = false;
+                        return mostrarMensaje("⚠️ Error en Storage (CORS). Usa una URL de imagen directa.", "error");
+                    }
                 }
 
-                // Guardar trofeo
+                // Guardar en Firestore (Firestore nunca tiene problemas de CORS)
                 await db.collection("salon_fama").add({
                     categoria: categoriaFinal,
                     anio: anio,
@@ -533,7 +575,6 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
-                // Si el usuario pidió guardar la nueva categoría permanentemente
                 if (guardarCatEnDB) {
                     await db.collection("configuraciones").doc("salon_fama").set({
                         categoriasCustom: firebase.firestore.FieldValue.arrayUnion(categoriaFinal)
@@ -541,23 +582,21 @@
                 }
 
                 cerrarModalAñadir();
-                alert("✅ ¡Éxito! El trofeo ya forma parte de la historia.");
+                mostrarMensaje("✅ ¡Trofeo guardado y publicado con éxito!", "exito");
 
             } catch (error) {
-                console.error(error);
-                alert("❌ Ocurrió un error al guardar. Revisa tu conexión o los permisos de Storage.");
+                console.error("Error al registrar en Firestore:", error);
                 btn.innerText = "🚀 PUBLICAR EN EL SALÓN";
                 btn.disabled = false;
+                mostrarMensaje("❌ Error de guardado: " + error.message, "error");
             }
         }
 
         // ELIMINAR TROFEO
         function eliminarTrofeo(idDoc) {
-            if (confirm("⚠️ ¿Estás seguro de que deseas ELIMINAR este trofeo histórico de la vitrina? Esta acción no se puede deshacer.")) {
-                db.collection("salon_fama").doc(idDoc).delete()
-                  .then(() => alert("🗑️ Trofeo eliminado del salón."))
-                  .catch(err => alert("Error al eliminar: " + err.message));
-            }
+            db.collection("salon_fama").doc(idDoc).delete()
+              .then(() => mostrarMensaje("🗑️ Trofeo eliminado del salón.", "info"))
+              .catch(err => mostrarMensaje("Error al eliminar: " + err.message, "error"));
         }
 
         // Inicializar listeners al cargar
