@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salón de la Fama | Rigelcraft Studio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Angkor&family=Anton&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-image: url("galería.png"); /* Usa el fondo de tu galería */
+            background-size: cover;
+            background-attachment: fixed;
+            background-color: #050505;
+            font-family: 'Arial', sans-serif;
+            padding-bottom: 50px;
+            color: #e6edf3;
+        }
+
+        hr {
+            border: none;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #0184ff, #00eeff, #00ffb3);
+            box-shadow: 0 0 10px #00eeff, 0 0 10px #00c3ff;
+            margin: 30px 0;
+        }
+
+        .breadcrumb { text-align: left; width: 100%; margin: 20px 0 20px 2%; font-size: 20px; text-shadow: 0 0 4px #000; }
+        .breadcrumb a { color: #00eeff; text-decoration: underline; font-weight: bold; transition: 0.3s; text-shadow: 0 0 5px #000; }
+        .breadcrumb a:hover { color: #fff; text-shadow: 0 0 10px #00eeff; }
+        .breadcrumb span { color: #00eeff; font-weight: bold; text-decoration: none; }
+
+        .contenedor-mega-titulo { text-align: left; width: 100%; margin: 20px 0 20px 2%; max-width: 98%; }
+        .mega-titulo {
+            font-family: 'Angkor', 'Anton', Arial, sans-serif;
+            font-size: clamp(35px, 6vw, 110px);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0; line-height: 1;
+            background-image: url('https://static.vecteezy.com/system/resources/previews/006/059/573/non_2x/blue-water-surface-background-waves-of-sea-ocean-pool-and-lake-light-ripple-texture-seamless-pattern-vector.jpg');
+            background-size: 400px;
+            background-position: center;
+            -webkit-background-clip: text; background-clip: text;
+            color: transparent;
+            -webkit-text-stroke: 1.5px #003050;
+            filter: drop-shadow(0 0 10px #00eeff) drop-shadow(0 0 20px #00e1ff);
+        }
+
+        h3 { color: #e6edf3; font-size: 25px; text-shadow: 0 0 4px #000; margin: 0 2% 15px 2%; text-align: left; }
+        p.intro { color: #e6edf3; font-size: 22px; text-shadow: 0 0 4px #000; margin: 0 2% 20px 2%; text-align: left; }
+
+        /* NAVEGACIÓN Y FILTROS POR CATEGORÍAS */
+        .selector-vistas { display: flex; justify-content: center; gap: 15px; margin: 30px auto; width: 96%; flex-wrap: wrap; }
+        .btn-vista {
+            background: rgba(0, 0, 0, 0.85); color: #00eeff; border: 2px solid #00eeff; padding: 12px 24px;
+            border-radius: 8px; font-family: 'Anton', Arial, sans-serif; font-size: clamp(14px, 2.5vw, 18px);
+            cursor: pointer; transition: all 0.3s ease; letter-spacing: 1px; box-shadow: 0 0 10px rgba(0, 238, 255, 0.2);
+        }
+        .btn-vista:hover, .btn-vista.activo { background: linear-gradient(135deg, #00eeff, #0051ff); color: #ffffff; border-color: #00fff2; box-shadow: 0 0 18px rgba(0, 255, 242, 0.6); transform: scale(1.05); }
+
+        /* PANEL ADMIN */
+        .admin-controls { display: none; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 20px auto 40px auto; width: 96%; }
+        .btn-accion { 
+            background: linear-gradient(135deg, #00eeff, #0051ff); color: #fff; font-family: 'Anton', Arial, sans-serif; 
+            font-size: clamp(16px, 3vw, 22px); padding: 15px 30px; border: 2px solid #00fff2; border-radius: 10px; 
+            cursor: pointer; box-shadow: 0 0 15px rgba(0, 238, 255, 0.5); transition: 0.3s; letter-spacing: 1px; 
+        }
+        .btn-accion:hover { background: linear-gradient(135deg, #ffe600, #ff8800); color: #000; border-color: #ffe600; transform: scale(1.03); box-shadow: 0 0 20px #ffe600; }
+
+        /* GRID DE TROFEOS */
+        .grid-fama { display: grid; grid-template-columns: 1fr; gap: 40px; width: 90%; max-width: 1000px; margin: 40px auto; }
+        
+        .tarjeta-trofeo {
+            background: rgba(0, 0, 0, 0.85); border: 5px solid #00eeff; border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 238, 255, 0.4); display: flex; flex-direction: column; overflow: hidden;
+            transition: transform 0.3s, opacity 0.4s; position: relative;
+        }
+        .tarjeta-trofeo:hover { box-shadow: 0 0 30px rgba(0, 238, 255, 0.7); transform: translateY(-5px); }
+        .tarjeta-trofeo.oculto { display: none; }
+        
+        .trofeo-img-container { width: 100%; border-bottom: 3px solid #00eeff; background: #000; text-align: center; }
+        .trofeo-img-container img { 
+            width: 100%; max-height: 500px; object-fit: contain; display: block; cursor: pointer; transition: 0.3s;
+        }
+        .trofeo-img-container img:hover { filter: brightness(1.1); }
+
+        .trofeo-info { padding: 25px; }
+        .trofeo-titulo { font-family: 'Anton', Arial, sans-serif; font-size: 32px; color: #ffe600; text-shadow: 0 0 10px #ffae00; margin-bottom: 5px; letter-spacing: 1px; text-transform: uppercase; }
+        .trofeo-categoria { font-size: 18px; color: #00eeff; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 5px #00eeff; display: inline-block; background: rgba(0, 238, 255, 0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(0, 238, 255, 0.3); }
+        .trofeo-desc { font-size: 18px; color: #e6edf3; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; }
+        .trofeo-fecha { font-size: 14px; color: #888; font-style: italic; display: block; border-top: 1px solid #333; padding-top: 15px; }
+        
+        .btn-eliminar { position: absolute; top: 15px; right: 15px; background: rgba(255, 0, 0, 0.8); color: white; border: 2px solid #ff0000; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-weight: bold; display: none; transition: 0.3s; }
+        .btn-eliminar:hover { background: #ff0000; box-shadow: 0 0 15px #ff0000; transform: scale(1.1); }
+
+        /* FORMULARIO MODAL (AÑADIR TROFEO) */
+        .modal-form { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); overflow-y: auto; }
+        .form-content { background: #0a0a0a; margin: 5% auto; padding: 30px; border: 3px solid #00eeff; width: 90%; max-width: 600px; border-radius: 12px; box-shadow: 0 0 30px #00eeff; position: relative; }
+        .form-content h2 { color: #00eeff; font-family: 'Anton', Arial, sans-serif; margin-bottom: 20px; font-size: 28px; letter-spacing: 1px; text-align: center; }
+        
+        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; }
+        .form-group label { color: #fff; font-weight: bold; margin-bottom: 8px; font-size: 16px; }
+        .form-input { padding: 12px; background: rgba(0,0,0,0.8); border: 2px solid #00eeff; border-radius: 8px; color: #fff; font-size: 16px; outline: none; transition: 0.3s; }
+        .form-input:focus { box-shadow: 0 0 10px #00eeff; }
+        textarea.form-input { resize: vertical; min-height: 120px; }
+        
+        .caja-nueva-categoria { display: none; margin-top: 10px; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 8px; border: 1px dashed #00eeff; }
+        .checkbox-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #00ffb3; margin-top: 10px; font-weight: normal; }
+        
+        .btn-guardar { width: 100%; background: linear-gradient(135deg, #00ff22, #009914); color: #fff; font-size: 20px; padding: 15px; border: 2px solid #00ff22; border-radius: 8px; cursor: pointer; font-family: 'Anton', sans-serif; letter-spacing: 1px; transition: 0.3s; margin-top: 10px; }
+        .btn-guardar:hover { background: #00ff22; color: #000; box-shadow: 0 0 20px #00ff22; transform: scale(1.02); }
+        .btn-cancelar { width: 100%; background: transparent; color: #ff5252; border: 2px solid #ff5252; font-size: 18px; padding: 10px; border-radius: 8px; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        .btn-cancelar:hover { background: #ff5252; color: #fff; }
+
+        /* VISOR DE IMÁGENES PANTALLA COMPLETA */
+        .modal-img { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); cursor: pointer; }
+        .modal-img-content { display: block; max-width: 95%; max-height: 95%; margin: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 4px solid #00eeff; border-radius: 10px; box-shadow: 0 0 30px #00eeff; }
+        .cerrar-img { position: absolute; top: 15px; right: 30px; color: #00eeff; font-size: 50px; font-weight: bold; cursor: pointer; z-index: 3001; text-shadow: 0 0 10px #00eeff; transition: 0.3s; }
+        .cerrar-img:hover { color: white; transform: scale(1.2); }
+
+        .footer-admin { text-align: center; margin-top: 50px; }
+        .btn-toggle-admin { background: transparent; border: none; font-size: 24px; cursor: pointer; filter: grayscale(100%); transition: 0.3s; }
+        .btn-toggle-admin:hover { filter: grayscale(0%); transform: scale(1.2); }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            .mega-titulo { font-size: clamp(25px, 9vw, 50px) !important; text-align: center; margin: 0 auto; width: 95%; }
+            .contenedor-mega-titulo { text-align: center; margin-left: 0; width: 100%; }
+            .breadcrumb { text-align: center; margin-left: 0; }
+            h3, p.intro { text-align: center; margin-left: 5%; margin-right: 5%; font-size: 18px; }
+            .grid-fama { width: 95%; gap: 25px; margin-top: 20px;}
+            .trofeo-info { padding: 15px; }
+            .trofeo-titulo { font-size: 24px; }
+            .trofeo-desc { font-size: 16px; }
+            .form-content { width: 95%; padding: 20px; margin: 10% auto; }
+            .btn-vista { padding: 8px 16px; font-size: 13px; }
+        }
+    </style>
+
+    <!-- FIREBASE -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+    <hr>
+    <div class="breadcrumb">
+        <a href="index.html">Inicio</a><span> / Salón de la Fama</span>
+    </div>
+    
+    <div class="contenedor-mega-titulo">
+        <h1 class="mega-titulo">SALÓN DE LA FAMA</h1>
+    </div>
+    <hr>
+    
+    <h3>¡La vitrina inmortal de Rigelcraft Studio!</h3>
+    <p class="intro">Este es el espacio sagrado donde quedan grabados para la eternidad los nombres, las hazañas y los rostros de quienes lograron conquistar nuestros eventos más grandes. Una galería de honor exclusiva para campeones, récords históricos y leyendas de la comunidad.</p>
+    
+    <!-- PANEL ADMINISTRADOR -->
+    <div class="admin-controls" id="panel-admin">
+        <button class="btn-accion" onclick="abrirModalAñadir()">➕ AÑADIR NUEVO TROFEO</button>
+    </div>
+
+    <!-- FILTROS POR CATEGORÍA -->
+    <div class="selector-vistas" id="filtros-categorias">
+        <button class="btn-vista activo" data-cat="todos" onclick="filtrarCategoria('todos', this)">🏆 Todos los Trofeos</button>
+        <button class="btn-vista" data-cat="Torneo Galáctico" onclick="filtrarCategoria('Torneo Galáctico', this)">🌌 Torneo Galáctico</button>
+        <!-- Las categorías guardadas se inyectarán aquí automáticamente -->
+    </div>
+
+    <!-- CONTENEDOR DE TROFEOS -->
+    <div class="grid-fama" id="contenedor-trofeos">
+        <p style="text-align: center; color: #00eeff; font-size: 20px;">🌌 Conectando con los registros históricos...</p>
+    </div>
+
+    <hr>
+    <div class="breadcrumb" style="text-align: center; margin-left: 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <a href="index.html">🏠 Volver al Inicio</a>
+        <span style="color: #00eeff; text-shadow: 0 0 5px #000;"> | </span>
+        <a href="torneo.html">🏆 Ir al Torneo Galáctico</a>
+    </div>
+
+    <div class="footer-admin">
+        <button class="btn-toggle-admin" id="btn-admin-icon" onclick="solicitarAccesoAdmin()" title="Modo Administrador">⚙️</button>
+    </div>
+
+    <!-- MODAL: VISOR DE IMÁGENES -->
+    <div id="modal-visor" class="modal-img">
+        <span class="cerrar-img" onclick="cerrarModalImg()">&times;</span>
+        <img class="modal-img-content" id="img-ampliada">
+    </div>
+
+    <!-- MODAL: FORMULARIO AÑADIR TROFEO -->
+    <div id="modal-form" class="modal-form">
+        <div class="form-content">
+            <h2>➕ NUEVO RECONOCIMIENTO</h2>
+            
+            <div class="form-group">
+                <label>Categoría del Evento:</label>
+                <select id="form-categoria-select" class="form-input" onchange="verificarCategoriaNueva()">
+                    <option value="Torneo Galáctico">🌌 Torneo Galáctico</option>
+                    <!-- Aquí se cargarán las categorías guardadas -->
+                    <option value="custom">➕ Añadir nueva categoría...</option>
+                </select>
+                
+                <div id="caja-nueva-categoria" class="caja-nueva-categoria">
+                    <input type="text" id="form-categoria-custom" class="form-input" style="width: 100%; margin-bottom: 5px;" placeholder="Ej. Torneo de Diciembre">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="form-guardar-categoria" checked>
+                        💾 Guardar en la base de datos como una categoría fija para el futuro.
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group" style="flex-direction: row; gap: 10px;">
+                <div style="flex: 1;">
+                    <label>Año de la Edición:</label>
+                    <input type="text" id="form-anio" class="form-input" style="width: 100%;" placeholder="Ej. 2026">
+                </div>
+                <div style="flex: 1;">
+                    <label>Fecha de Publicación:</label>
+                    <input type="date" id="form-fecha" class="form-input" style="width: 100%;">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Título / Condecoración:</label>
+                <select id="form-titulo-select" class="form-input" onchange="verificarTituloPersonalizado()">
+                    <option value="👑 Campeón del Torneo">👑 Campeón del Torneo</option>
+                    <option value="🌟 Campeón de Puntos">🌟 Campeón de Puntos</option>
+                    <option value="🏆 Bicampeón del Torneo">🏆 Bicampeón del Torneo</option>
+                    <option value="🎁 Premio Heredado">🎁 Premio Heredado</option>
+                    <option value="custom">✏️ Nuevo (Escribir título personalizado)</option>
+                </select>
+                <input type="text" id="form-titulo-custom" class="form-input" style="display:none; margin-top: 10px;" placeholder="Escribe el nuevo título aquí...">
+            </div>
+
+            <div class="form-group">
+                <label>Descripción / Hazaña:</label>
+                <textarea id="form-desc" class="form-input" placeholder="Relata cómo llegó a la victoria, sus méritos y su historia en el canal..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Subir Imagen del Trofeo:</label>
+                <input type="file" id="form-file" class="form-input" accept="image/*" style="margin-bottom: 10px;">
+                <label style="font-size: 14px; color: #aaa;">O pega un enlace de internet (URL):</label>
+                <input type="text" id="form-link" class="form-input" placeholder="https://ejemplo.com/imagen.png">
+            </div>
+
+            <button class="btn-guardar" id="btn-guardar-trofeo" onclick="guardarTrofeo()">🚀 PUBLICAR EN EL SALÓN</button>
+            <button class="btn-cancelar" onclick="cerrarModalAñadir()">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURACIÓN FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNr-hwGarQxNOKhcHkPm33egsmi4O3DgE",
+            authDomain: "rigelcraft-studio.firebaseapp.com",
+            projectId: "rigelcraft-studio",
+            storageBucket: "rigelcraft-studio.firebasestorage.app",
+            messagingSenderId: "1044676614155",
+            appId: "1:1044676614155:web:50b8f77a4101fa5c650f0e",
+            measurementId: "G-E67K17585E"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const storage = firebase.storage();
+        
+        let isAdmin = false;
+        let categoriaFiltroActual = 'todos';
+        let categoriasGuardadas = [];
+
+        // AUTENTICACIÓN ADMIN
+        auth.onAuthStateChanged((user) => {
+            isAdmin = !!user;
+            document.getElementById("btn-admin-icon").style.filter = isAdmin ? "grayscale(0%)" : "grayscale(100%)";
+            document.getElementById("panel-admin").style.display = isAdmin ? "flex" : "none";
+            actualizarBotonesEliminar();
+        });
+
+        function solicitarAccesoAdmin() {
+            if (isAdmin) {
+                auth.signOut().then(() => alert("🔒 Sesión cerrada. Modo Público activo."));
+            } else {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider)
+                    .then((result) => alert(`🔓 Bienvenido, ${result.user.displayName}. Modo Administrador activo.`))
+                    .catch((error) => alert("❌ Error de inicio de sesión."));
+            }
+        }
+
+        // LEER CATEGORÍAS GUARDADAS PARA LOS FILTROS
+        function escucharCategorias() {
+            db.collection("configuraciones").doc("salon_fama").onSnapshot((doc) => {
+                const contenedorFiltros = document.getElementById("filtros-categorias");
+                const selectForm = document.getElementById("form-categoria-select");
+                
+                // Reiniciar filtros base
+                contenedorFiltros.innerHTML = `
+                    <button class="btn-vista ${categoriaFiltroActual === 'todos' ? 'activo' : ''}" data-cat="todos" onclick="filtrarCategoria('todos', this)">🏆 Todos los Trofeos</button>
+                    <button class="btn-vista ${categoriaFiltroActual === 'Torneo Galáctico' ? 'activo' : ''}" data-cat="Torneo Galáctico" onclick="filtrarCategoria('Torneo Galáctico', this)">🌌 Torneo Galáctico</button>
+                `;
+
+                // Reiniciar select base
+                selectForm.innerHTML = `<option value="Torneo Galáctico">🌌 Torneo Galáctico</option>`;
+
+                if (doc.exists && doc.data().categoriasCustom && doc.data().categoriasCustom.length > 0) {
+                    categoriasGuardadas = doc.data().categoriasCustom;
+                    
+                    categoriasGuardadas.forEach(cat => {
+                        // Añadir botón de filtro
+                        contenedorFiltros.innerHTML += `<button class="btn-vista ${categoriaFiltroActual === cat ? 'activo' : ''}" data-cat="${cat}" onclick="filtrarCategoria('${cat}', this)">📌 ${cat}</button>`;
+                        // Añadir opción al select del form
+                        selectForm.innerHTML += `<option value="${cat}">📌 ${cat}</option>`;
+                    });
+                }
+                
+                // Opción Custom siempre al final del select
+                selectForm.innerHTML += `<option value="custom">➕ Añadir nueva categoría...</option>`;
+                verificarCategoriaNueva(); // Refrescar visibilidad
+            });
+        }
+
+        // FILTRAR TROFEOS VISUALMENTE
+        function filtrarCategoria(categoria, btnElement) {
+            categoriaFiltroActual = categoria;
+            
+            // Efecto visual botones
+            document.querySelectorAll("#filtros-categorias .btn-vista").forEach(btn => btn.classList.remove('activo'));
+            if(btnElement) btnElement.classList.add('activo');
+
+            // Filtrar tarjetas
+            document.querySelectorAll(".tarjeta-trofeo").forEach(tarjeta => {
+                if (categoria === 'todos') {
+                    tarjeta.classList.remove('oculto');
+                } else {
+                    const catTarjeta = tarjeta.getAttribute('data-categoria');
+                    if (catTarjeta === categoria) {
+                        tarjeta.classList.remove('oculto');
+                    } else {
+                        tarjeta.classList.add('oculto');
+                    }
+                }
+            });
+        }
+
+        // LEER TROFEOS DE FIRESTORE EN TIEMPO REAL
+        db.collection("salon_fama").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+            const contenedor = document.getElementById("contenedor-trofeos");
+            contenedor.innerHTML = "";
+
+            if (snapshot.empty) {
+                contenedor.innerHTML = `<p style="text-align: center; color: #aaa; font-size: 20px;">Aún no hay campeones registrados en la vitrina.</p>`;
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const id = doc.id;
+                
+                // Formatear Fecha visual
+                let fechaObj = data.fechaSeleccionada ? new Date(data.fechaSeleccionada + "T00:00:00") : new Date();
+                let opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
+                let fechaTexto = fechaObj.toLocaleDateString('es-ES', opcionesFecha);
+
+                // Construir título completo (Ej: 👑 Campeón del Torneo 2026)
+                let tituloVisual = `${data.tituloBase} ${data.anio}`;
+                let catVisual = data.categoria || "Torneo Galáctico";
+                
+                let ocultoClase = (categoriaFiltroActual !== 'todos' && categoriaFiltroActual !== catVisual) ? 'oculto' : '';
+
+                // HTML de la Tarjeta
+                let tarjetaHtml = `
+                    <div class="tarjeta-trofeo ${ocultoClase}" data-categoria="${catVisual}">
+                        <button class="btn-eliminar btn-admin-only" onclick="eliminarTrofeo('${id}')" title="Borrar este reconocimiento">🗑️ ELIMINAR</button>
+                        
+                        <div class="trofeo-img-container">
+                            <img src="${data.imagenUrl}" onclick="abrirModalImg(this.src)" alt="${tituloVisual}" onerror="this.src='https://via.placeholder.com/800x400?text=Imagen+No+Disponible'">
+                        </div>
+                        
+                        <div class="trofeo-info">
+                            <h2 class="trofeo-titulo">${tituloVisual}</h2>
+                            <span class="trofeo-categoria">${catVisual}</span>
+                            <p class="trofeo-desc">${data.descripcion}</p>
+                            <span class="trofeo-fecha">Publicado el ${fechaTexto}</span>
+                        </div>
+                    </div>
+                `;
+                contenedor.innerHTML += tarjetaHtml;
+            });
+            actualizarBotonesEliminar();
+        }, (error) => {
+            console.error("Error cargando el salón:", error);
+            document.getElementById("contenedor-trofeos").innerHTML = `<p style="text-align: center; color: #ff5252;">Error de conexión.</p>`;
+        });
+
+        function actualizarBotonesEliminar() {
+            document.querySelectorAll('.btn-admin-only').forEach(btn => {
+                btn.style.display = isAdmin ? 'block' : 'none';
+            });
+        }
+
+        // LÓGICA DEL VISOR DE IMÁGENES
+        const modalVisor = document.getElementById("modal-visor");
+        function abrirModalImg(src) {
+            document.getElementById("img-ampliada").src = src;
+            modalVisor.style.display = "block";
+        }
+        function cerrarModalImg() {
+            modalVisor.style.display = "none";
+        }
+        modalVisor.addEventListener('click', (e) => {
+            if (e.target === modalVisor) cerrarModalImg();
+        });
+
+        // LÓGICA DEL FORMULARIO AÑADIR
+        const modalForm = document.getElementById("modal-form");
+        
+        function abrirModalAñadir() {
+            // Autocompletar fecha y año actuales
+            let hoy = new Date();
+            let mes = ('0' + (hoy.getMonth() + 1)).slice(-2);
+            let dia = ('0' + hoy.getDate()).slice(-2);
+            document.getElementById('form-fecha').value = `${hoy.getFullYear()}-${mes}-${dia}`;
+            document.getElementById('form-anio').value = hoy.getFullYear();
+            
+            // Limpiar campos
+            document.getElementById('form-desc').value = "";
+            document.getElementById('form-file').value = "";
+            document.getElementById('form-link').value = "";
+            
+            // Reset Selects
+            document.getElementById('form-categoria-select').selectedIndex = 0;
+            document.getElementById('form-categoria-custom').value = "";
+            document.getElementById('form-guardar-categoria').checked = true;
+            verificarCategoriaNueva();
+            
+            document.getElementById('form-titulo-select').selectedIndex = 0;
+            verificarTituloPersonalizado();
+            
+            modalForm.style.display = "block";
+        }
+
+        function cerrarModalAñadir() {
+            modalForm.style.display = "none";
+            document.getElementById("btn-guardar-trofeo").innerText = "🚀 PUBLICAR EN EL SALÓN";
+            document.getElementById("btn-guardar-trofeo").disabled = false;
+        }
+
+        function verificarCategoriaNueva() {
+            const select = document.getElementById('form-categoria-select');
+            const boxNueva = document.getElementById('caja-nueva-categoria');
+            if (select.value === 'custom') {
+                boxNueva.style.display = 'block';
+            } else {
+                boxNueva.style.display = 'none';
+            }
+        }
+
+        function verificarTituloPersonalizado() {
+            const select = document.getElementById('form-titulo-select');
+            const customInput = document.getElementById('form-titulo-custom');
+            if (select.value === 'custom') {
+                customInput.style.display = 'block';
+            } else {
+                customInput.style.display = 'none';
+                customInput.value = '';
+            }
+        }
+
+        async function guardarTrofeo() {
+            const anio = document.getElementById('form-anio').value.trim();
+            const fecha = document.getElementById('form-fecha').value;
+            const desc = document.getElementById('form-desc').value.trim();
+            
+            // Resolver Categoría
+            const selectCat = document.getElementById('form-categoria-select').value;
+            let categoriaFinal = selectCat;
+            let guardarCatEnDB = false;
+            
+            if (selectCat === 'custom') {
+                categoriaFinal = document.getElementById('form-categoria-custom').value.trim();
+                guardarCatEnDB = document.getElementById('form-guardar-categoria').checked;
+                if(!categoriaFinal) return alert("⚠️ Escribe el nombre de la nueva categoría.");
+            }
+
+            // Resolver Título
+            const selectTit = document.getElementById('form-titulo-select').value;
+            let tituloBase = selectTit === 'custom' ? document.getElementById('form-titulo-custom').value.trim() : selectTit;
+
+            const archivoFile = document.getElementById('form-file').files[0];
+            const archivoLink = document.getElementById('form-link').value.trim();
+
+            if (!anio || !tituloBase || !desc) {
+                return alert("⚠️ Por favor, llena todos los campos de texto.");
+            }
+            if (!archivoFile && !archivoLink) {
+                return alert("⚠️ Debes subir una imagen o pegar un enlace URL.");
+            }
+
+            const btn = document.getElementById("btn-guardar-trofeo");
+            btn.innerText = "⏳ Subiendo y guardando...";
+            btn.disabled = true;
+
+            try {
+                let imgUrlDestino = "";
+
+                // Prioriza archivo físico a Firebase Storage
+                if (archivoFile) {
+                    const storageRef = storage.ref(`salon_fama/${Date.now()}_${archivoFile.name}`);
+                    await storageRef.put(archivoFile);
+                    imgUrlDestino = await storageRef.getDownloadURL();
+                } else {
+                    imgUrlDestino = archivoLink;
+                }
+
+                // Guardar trofeo
+                await db.collection("salon_fama").add({
+                    categoria: categoriaFinal,
+                    anio: anio,
+                    tituloBase: tituloBase,
+                    descripcion: desc,
+                    imagenUrl: imgUrlDestino,
+                    fechaSeleccionada: fecha,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Si el usuario pidió guardar la nueva categoría permanentemente
+                if (guardarCatEnDB) {
+                    await db.collection("configuraciones").doc("salon_fama").set({
+                        categoriasCustom: firebase.firestore.FieldValue.arrayUnion(categoriaFinal)
+                    }, { merge: true });
+                }
+
+                cerrarModalAñadir();
+                alert("✅ ¡Éxito! El trofeo ya forma parte de la historia.");
+
+            } catch (error) {
+                console.error(error);
+                alert("❌ Ocurrió un error al guardar. Revisa tu conexión o los permisos de Storage.");
+                btn.innerText = "🚀 PUBLICAR EN EL SALÓN";
+                btn.disabled = false;
+            }
+        }
+
+        // ELIMINAR TROFEO
+        function eliminarTrofeo(idDoc) {
+            if (confirm("⚠️ ¿Estás seguro de que deseas ELIMINAR este trofeo histórico de la vitrina? Esta acción no se puede deshacer.")) {
+                db.collection("salon_fama").doc(idDoc).delete()
+                  .then(() => alert("🗑️ Trofeo eliminado del salón."))
+                  .catch(err => alert("Error al eliminar: " + err.message));
+            }
+        }
+
+        // Inicializar listeners al cargar
+        document.addEventListener("DOMContentLoaded", () => {
+            escucharCategorias();
+        });
+    </script>
+</body>
+</html>
