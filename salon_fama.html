@@ -82,19 +82,24 @@
         .tarjeta-trofeo:hover { box-shadow: 0 0 30px rgba(0, 238, 255, 0.7); transform: translateY(-5px); }
         .tarjeta-trofeo.oculto { display: none; }
         
-        .trofeo-img-container { width: 100%; border-bottom: 3px solid #00eeff; background: #000; text-align: center; }
+        .trofeo-img-container { width: 100%; border-bottom: 3px solid #00eeff; background: #000; text-align: center; position: relative; z-index: 1; }
         .trofeo-img-container img { 
             width: 100%; max-height: 500px; object-fit: contain; display: block; cursor: pointer; transition: 0.3s;
         }
         .trofeo-img-container img:hover { filter: brightness(1.1); }
 
-        .trofeo-info { padding: 25px; }
+        .trofeo-info { padding: 25px; position: relative; z-index: 2; }
         .trofeo-titulo { font-family: 'Anton', Arial, sans-serif; font-size: 32px; color: #ffe600; text-shadow: 0 0 10px #ffae00; margin-bottom: 5px; letter-spacing: 1px; text-transform: uppercase; }
         .trofeo-categoria { font-size: 18px; color: #00eeff; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 5px #00eeff; display: inline-block; background: rgba(0, 238, 255, 0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(0, 238, 255, 0.3); }
-        .trofeo-desc { font-size: 18px; color: #e6edf3; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; }
+        .trofeo-desc { font-size: 18px; color: #e6edf3; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; word-wrap: break-word; }
         .trofeo-fecha { font-size: 14px; color: #888; font-style: italic; display: block; border-top: 1px solid #333; padding-top: 15px; }
         
-        .btn-eliminar { position: absolute; top: 15px; right: 15px; background: rgba(255, 0, 0, 0.8); color: white; border: 2px solid #ff0000; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-weight: bold; display: none; transition: 0.3s; }
+        /* BOTÓN ELIMINAR CORREGIDO (Z-INDEX SUPERIOR) */
+        .btn-eliminar { 
+            position: absolute; top: 15px; right: 15px; background: rgba(255, 0, 0, 0.85); color: white; 
+            border: 2px solid #ff0000; border-radius: 8px; padding: 8px 12px; cursor: pointer; 
+            font-weight: bold; display: none; transition: 0.3s; z-index: 20; box-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
         .btn-eliminar:hover { background: #ff0000; box-shadow: 0 0 15px #ff0000; transform: scale(1.1); }
 
         /* FORMULARIO MODAL */
@@ -150,7 +155,7 @@
         }
     </style>
 
-    <!-- FIREBASE (Solo requiere Firestore y Auth, sin Storage) -->
+    <!-- FIREBASE (Sin Storage, 100% Base64) -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -449,7 +454,7 @@
             }
         }
 
-        // COMPRESIÓN DE IMAGEN A BASE64 (Burlar Storage y CORS)
+        // COMPRESIÓN DE IMAGEN A BASE64
         function procesarImagenBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -476,7 +481,6 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // Calidad equilibrada para que pese menos de 300KB
                         const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
                         resolve(dataUrl);
                     };
