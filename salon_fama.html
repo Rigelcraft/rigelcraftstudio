@@ -10,7 +10,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-image: url("galería.png"); /* Usa el fondo de tu galería */
+            background-image: url("galería.png");
             background-size: cover;
             background-attachment: fixed;
             background-color: #050505;
@@ -97,7 +97,7 @@
         .btn-eliminar { position: absolute; top: 15px; right: 15px; background: rgba(255, 0, 0, 0.8); color: white; border: 2px solid #ff0000; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-weight: bold; display: none; transition: 0.3s; }
         .btn-eliminar:hover { background: #ff0000; box-shadow: 0 0 15px #ff0000; transform: scale(1.1); }
 
-        /* FORMULARIO MODAL (AÑADIR TROFEO) */
+        /* FORMULARIO MODAL */
         .modal-form { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); overflow-y: auto; }
         .form-content { background: #0a0a0a; margin: 5% auto; padding: 30px; border: 3px solid #00eeff; width: 90%; max-width: 600px; border-radius: 12px; box-shadow: 0 0 30px #00eeff; position: relative; }
         .form-content h2 { color: #00eeff; font-family: 'Anton', Arial, sans-serif; margin-bottom: 20px; font-size: 28px; letter-spacing: 1px; text-align: center; }
@@ -116,7 +116,7 @@
         .btn-cancelar { width: 100%; background: transparent; color: #ff5252; border: 2px solid #ff5252; font-size: 18px; padding: 10px; border-radius: 8px; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         .btn-cancelar:hover { background: #ff5252; color: #fff; }
 
-        /* NOTIFICACIONES Y AVISOS VISUALES */
+        /* NOTIFICACIONES */
         .notificacion-flotante {
             display: none; position: fixed; bottom: 25px; right: 25px; z-index: 4000;
             padding: 16px 24px; border-radius: 10px; font-weight: bold; font-size: 16px;
@@ -126,12 +126,7 @@
         .notif-error { background: rgba(40, 0, 0, 0.95); border: 2px solid #ff5252; color: #ff5252; text-shadow: 0 0 5px #000; }
         .notif-info { background: rgba(0, 20, 40, 0.95); border: 2px solid #00eeff; color: #00eeff; text-shadow: 0 0 5px #000; }
 
-        .alerta-storage {
-            display: none; margin-top: 15px; padding: 12px; background: rgba(255, 82, 82, 0.15);
-            border: 1px solid #ff5252; border-radius: 8px; font-size: 14px; color: #ff9e9e; line-height: 1.4;
-        }
-
-        /* VISOR DE IMÁGENES PANTALLA COMPLETA */
+        /* VISOR DE IMÁGENES */
         .modal-img { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); cursor: pointer; }
         .modal-img-content { display: block; max-width: 95%; max-height: 95%; margin: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 4px solid #00eeff; border-radius: 10px; box-shadow: 0 0 30px #00eeff; }
         .cerrar-img { position: absolute; top: 15px; right: 30px; color: #00eeff; font-size: 50px; font-weight: bold; cursor: pointer; z-index: 3001; text-shadow: 0 0 10px #00eeff; transition: 0.3s; }
@@ -141,7 +136,6 @@
         .btn-toggle-admin { background: transparent; border: none; font-size: 24px; cursor: pointer; filter: grayscale(100%); transition: 0.3s; }
         .btn-toggle-admin:hover { filter: grayscale(0%); transform: scale(1.2); }
 
-        /* Responsividad */
         @media (max-width: 768px) {
             .mega-titulo { font-size: clamp(25px, 9vw, 50px) !important; text-align: center; margin: 0 auto; width: 95%; }
             .contenedor-mega-titulo { text-align: center; margin-left: 0; width: 100%; }
@@ -156,11 +150,10 @@
         }
     </style>
 
-    <!-- FIREBASE -->
+    <!-- FIREBASE (Solo requiere Firestore y Auth, sin Storage) -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 </head>
 <body>
     <hr>
@@ -176,19 +169,15 @@
     <h3>¡La vitrina inmortal de Rigelcraft Studio!</h3>
     <p class="intro">Este es el espacio sagrado donde quedan grabados para la eternidad los nombres, las hazañas y los rostros de quienes lograron conquistar nuestros eventos más grandes. Una galería de honor exclusiva para campeones, récords históricos y leyendas de la comunidad.</p>
     
-    <!-- PANEL ADMINISTRADOR -->
     <div class="admin-controls" id="panel-admin">
         <button class="btn-accion" onclick="abrirModalAñadir()">➕ AÑADIR NUEVO TROFEO</button>
     </div>
 
-    <!-- FILTROS POR CATEGORÍA -->
     <div class="selector-vistas" id="filtros-categorias">
         <button class="btn-vista activo" data-cat="todos" onclick="filtrarCategoria('todos', this)">🏆 Todos los Trofeos</button>
         <button class="btn-vista" data-cat="Torneo Galáctico" onclick="filtrarCategoria('Torneo Galáctico', this)">🌌 Torneo Galáctico</button>
-        <!-- Las categorías guardadas se inyectarán aquí automáticamente -->
     </div>
 
-    <!-- CONTENEDOR DE TROFEOS -->
     <div class="grid-fama" id="contenedor-trofeos">
         <p style="text-align: center; color: #00eeff; font-size: 20px;">🌌 Conectando con los registros históricos...</p>
     </div>
@@ -219,7 +208,6 @@
                 <label>Categoría del Evento:</label>
                 <select id="form-categoria-select" class="form-input" onchange="verificarCategoriaNueva()">
                     <option value="Torneo Galáctico">🌌 Torneo Galáctico</option>
-                    <!-- Aquí se cargarán las categorías guardadas -->
                     <option value="custom">➕ Añadir nueva categoría...</option>
                 </select>
                 
@@ -261,13 +249,10 @@
             </div>
 
             <div class="form-group">
-                <label>Subir Imagen del Trofeo:</label>
+                <label>Seleccionar Imagen del Trofeo:</label>
                 <input type="file" id="form-file" class="form-input" accept="image/*" style="margin-bottom: 10px;">
-                <label style="font-size: 14px; color: #aaa;">O pega un enlace de internet directo (URL de imagen):</label>
-                <input type="text" id="form-link" class="form-input" placeholder="https://i.ibb.co/ejemplo.png o https://raw.githubusercontent.com/...">
-                <div id="alerta-error-storage" class="alerta-storage">
-                    ⚠️ <strong>Error de subida a Storage (CORS / Permisos):</strong> Firebase Storage bloqueó la subida directa del archivo. Puedes pegar un enlace directo de internet en el campo de arriba para publicarlo inmediatamente sin depender de Storage.
-                </div>
+                <label style="font-size: 14px; color: #aaa;">O usa un enlace web directo si lo prefieres:</label>
+                <input type="text" id="form-link" class="form-input" placeholder="https://ejemplo.com/imagen.png">
             </div>
 
             <button class="btn-guardar" id="btn-guardar-trofeo" onclick="guardarTrofeo()">🚀 PUBLICAR EN EL SALÓN</button>
@@ -275,11 +260,9 @@
         </div>
     </div>
 
-    <!-- NOTIFICACIÓN EN PANTALLA -->
     <div id="toast-notificacion" class="notificacion-flotante"></div>
 
     <script>
-        // CONFIGURACIÓN FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyBNr-hwGarQxNOKhcHkPm33egsmi4O3DgE",
             authDomain: "rigelcraft-studio.firebaseapp.com",
@@ -293,7 +276,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
-        const storage = firebase.storage();
         
         let isAdmin = false;
         let categoriaFiltroActual = 'todos';
@@ -304,10 +286,9 @@
             toast.className = `notificacion-flotante notif-${tipo}`;
             toast.innerText = texto;
             toast.style.display = "block";
-            setTimeout(() => { toast.style.display = "none"; }, 4500);
+            setTimeout(() => { toast.style.display = "none"; }, 4000);
         }
 
-        // AUTENTICACIÓN ADMIN
         auth.onAuthStateChanged((user) => {
             isAdmin = !!user;
             document.getElementById("btn-admin-icon").style.filter = isAdmin ? "grayscale(0%)" : "grayscale(100%)";
@@ -326,62 +307,46 @@
             }
         }
 
-        // LEER CATEGORÍAS GUARDADAS PARA LOS FILTROS
         function escucharCategorias() {
             db.collection("configuraciones").doc("salon_fama").onSnapshot((doc) => {
                 const contenedorFiltros = document.getElementById("filtros-categorias");
                 const selectForm = document.getElementById("form-categoria-select");
                 
-                // Reiniciar filtros base
                 contenedorFiltros.innerHTML = `
                     <button class="btn-vista ${categoriaFiltroActual === 'todos' ? 'activo' : ''}" data-cat="todos" onclick="filtrarCategoria('todos', this)">🏆 Todos los Trofeos</button>
                     <button class="btn-vista ${categoriaFiltroActual === 'Torneo Galáctico' ? 'activo' : ''}" data-cat="Torneo Galáctico" onclick="filtrarCategoria('Torneo Galáctico', this)">🌌 Torneo Galáctico</button>
                 `;
 
-                // Reiniciar select base
                 selectForm.innerHTML = `<option value="Torneo Galáctico">🌌 Torneo Galáctico</option>`;
 
                 if (doc.exists && doc.data().categoriasCustom && doc.data().categoriasCustom.length > 0) {
                     categoriasGuardadas = doc.data().categoriasCustom;
-                    
                     categoriasGuardadas.forEach(cat => {
-                        // Añadir botón de filtro
                         contenedorFiltros.innerHTML += `<button class="btn-vista ${categoriaFiltroActual === cat ? 'activo' : ''}" data-cat="${cat}" onclick="filtrarCategoria('${cat}', this)">📌 ${cat}</button>`;
-                        // Añadir opción al select del form
                         selectForm.innerHTML += `<option value="${cat}">📌 ${cat}</option>`;
                     });
                 }
                 
-                // Opción Custom siempre al final del select
                 selectForm.innerHTML += `<option value="custom">➕ Añadir nueva categoría...</option>`;
-                verificarCategoriaNueva(); // Refrescar visibilidad
+                verificarCategoriaNueva();
             });
         }
 
-        // FILTRAR TROFEOS VISUALMENTE
         function filtrarCategoria(categoria, btnElement) {
             categoriaFiltroActual = categoria;
-            
-            // Efecto visual botones
             document.querySelectorAll("#filtros-categorias .btn-vista").forEach(btn => btn.classList.remove('activo'));
             if(btnElement) btnElement.classList.add('activo');
 
-            // Filtrar tarjetas
             document.querySelectorAll(".tarjeta-trofeo").forEach(tarjeta => {
                 if (categoria === 'todos') {
                     tarjeta.classList.remove('oculto');
                 } else {
                     const catTarjeta = tarjeta.getAttribute('data-categoria');
-                    if (catTarjeta === categoria) {
-                        tarjeta.classList.remove('oculto');
-                    } else {
-                        tarjeta.classList.add('oculto');
-                    }
+                    tarjeta.classList.toggle('oculto', catTarjeta !== categoria);
                 }
             });
         }
 
-        // LEER TROFEOS DE FIRESTORE EN TIEMPO REAL
         db.collection("salon_fama").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
             const contenedor = document.getElementById("contenedor-trofeos");
             contenedor.innerHTML = "";
@@ -395,26 +360,20 @@
                 const data = doc.data();
                 const id = doc.id;
                 
-                // Formatear Fecha visual
                 let fechaObj = data.fechaSeleccionada ? new Date(data.fechaSeleccionada + "T00:00:00") : new Date();
                 let opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
                 let fechaTexto = fechaObj.toLocaleDateString('es-ES', opcionesFecha);
 
-                // Construir título completo (Ej: 👑 Campeón del Torneo 2026)
                 let tituloVisual = `${data.tituloBase} ${data.anio}`;
                 let catVisual = data.categoria || "Torneo Galáctico";
-                
                 let ocultoClase = (categoriaFiltroActual !== 'todos' && categoriaFiltroActual !== catVisual) ? 'oculto' : '';
 
-                // HTML de la Tarjeta
                 let tarjetaHtml = `
                     <div class="tarjeta-trofeo ${ocultoClase}" data-categoria="${catVisual}">
                         <button class="btn-eliminar btn-admin-only" onclick="eliminarTrofeo('${id}')" title="Borrar este reconocimiento">🗑️ ELIMINAR</button>
-                        
                         <div class="trofeo-img-container">
                             <img src="${data.imagenUrl}" onclick="abrirModalImg(this.src)" alt="${tituloVisual}" onerror="this.src='https://via.placeholder.com/800x400?text=Imagen+No+Disponible'">
                         </div>
-                        
                         <div class="trofeo-info">
                             <h2 class="trofeo-titulo">${tituloVisual}</h2>
                             <span class="trofeo-categoria">${catVisual}</span>
@@ -437,7 +396,6 @@
             });
         }
 
-        // LÓGICA DEL VISOR DE IMÁGENES
         const modalVisor = document.getElementById("modal-visor");
         function abrirModalImg(src) {
             document.getElementById("img-ampliada").src = src;
@@ -450,49 +408,34 @@
             if (e.target === modalVisor) cerrarModalImg();
         });
 
-        // LÓGICA DEL FORMULARIO AÑADIR
         const modalForm = document.getElementById("modal-form");
-        
         function abrirModalAñadir() {
-            // Autocompletar fecha y año actuales
             let hoy = new Date();
             let mes = ('0' + (hoy.getMonth() + 1)).slice(-2);
             let dia = ('0' + hoy.getDate()).slice(-2);
             document.getElementById('form-fecha').value = `${hoy.getFullYear()}-${mes}-${dia}`;
             document.getElementById('form-anio').value = hoy.getFullYear();
-            
-            // Limpiar campos
             document.getElementById('form-desc').value = "";
             document.getElementById('form-file').value = "";
             document.getElementById('form-link').value = "";
-            
-            // Reset Selects
             document.getElementById('form-categoria-select').selectedIndex = 0;
             document.getElementById('form-categoria-custom').value = "";
             document.getElementById('form-guardar-categoria').checked = true;
             verificarCategoriaNueva();
-            
             document.getElementById('form-titulo-select').selectedIndex = 0;
             verificarTituloPersonalizado();
-            
             modalForm.style.display = "block";
         }
 
         function cerrarModalAñadir() {
             modalForm.style.display = "none";
-            document.getElementById("alerta-error-storage").style.display = "none";
             document.getElementById("btn-guardar-trofeo").innerText = "🚀 PUBLICAR EN EL SALÓN";
             document.getElementById("btn-guardar-trofeo").disabled = false;
         }
 
         function verificarCategoriaNueva() {
             const select = document.getElementById('form-categoria-select');
-            const boxNueva = document.getElementById('caja-nueva-categoria');
-            if (select.value === 'custom') {
-                boxNueva.style.display = 'block';
-            } else {
-                boxNueva.style.display = 'none';
-            }
+            document.getElementById('caja-nueva-categoria').style.display = select.value === 'custom' ? 'block' : 'none';
         }
 
         function verificarTituloPersonalizado() {
@@ -506,14 +449,48 @@
             }
         }
 
+        // COMPRESIÓN DE IMAGEN A BASE64 (Burlar Storage y CORS)
+        function procesarImagenBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDimension = 1200;
+
+                        if (width > height && width > maxDimension) {
+                            height = Math.round((height * maxDimension) / width);
+                            width = maxDimension;
+                        } else if (height > maxDimension) {
+                            width = Math.round((width * maxDimension) / height);
+                            height = maxDimension;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Calidad equilibrada para que pese menos de 300KB
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+                        resolve(dataUrl);
+                    };
+                    img.onerror = (err) => reject(err);
+                };
+                reader.onerror = (err) => reject(err);
+            });
+        }
+
         async function guardarTrofeo() {
             const anio = document.getElementById('form-anio').value.trim();
             const fecha = document.getElementById('form-fecha').value;
             const desc = document.getElementById('form-desc').value.trim();
-            const alertaStorage = document.getElementById("alerta-error-storage");
-            alertaStorage.style.display = "none";
             
-            // Resolver Categoría
             const selectCat = document.getElementById('form-categoria-select').value;
             let categoriaFinal = selectCat;
             let guardarCatEnDB = false;
@@ -524,7 +501,6 @@
                 if(!categoriaFinal) return mostrarMensaje("⚠️ Escribe el nombre de la nueva categoría.", "error");
             }
 
-            // Resolver Título
             const selectTit = document.getElementById('form-titulo-select').value;
             let tituloBase = selectTit === 'custom' ? document.getElementById('form-titulo-custom').value.trim() : selectTit;
 
@@ -535,42 +511,28 @@
                 return mostrarMensaje("⚠️ Por favor, llena todos los campos de texto.", "error");
             }
             if (!archivoFile && !archivoLink) {
-                return mostrarMensaje("⚠️ Debes seleccionar un archivo o ingresar una URL de imagen.", "error");
+                return mostrarMensaje("⚠️ Selecciona un archivo de imagen o pega un enlace.", "error");
             }
 
             const btn = document.getElementById("btn-guardar-trofeo");
-            btn.innerText = "⏳ Guardando información...";
+            btn.innerText = "⏳ Procesando y guardando...";
             btn.disabled = true;
 
             try {
-                let imgUrlDestino = "";
+                let imgUrlFinal = "";
 
-                // Si pegó enlace directo, se prioriza o usa sin tocar Storage
-                if (archivoLink) {
-                    imgUrlDestino = archivoLink;
-                } else if (archivoFile) {
-                    btn.innerText = "⏳ Subiendo archivo a Storage...";
-                    try {
-                        const nombreLimpio = archivoFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-                        const storageRef = storage.ref(`salon_fama/${Date.now()}_${nombreLimpio}`);
-                        await storageRef.put(archivoFile);
-                        imgUrlDestino = await storageRef.getDownloadURL();
-                    } catch (storageErr) {
-                        console.error("Fallo específico de Storage / CORS:", storageErr);
-                        alertaStorage.style.display = "block";
-                        btn.innerText = "🚀 PUBLICAR EN EL SALÓN";
-                        btn.disabled = false;
-                        return mostrarMensaje("⚠️ Error en Storage (CORS). Usa una URL de imagen directa.", "error");
-                    }
+                if (archivoFile) {
+                    imgUrlFinal = await procesarImagenBase64(archivoFile);
+                } else {
+                    imgUrlFinal = archivoLink;
                 }
 
-                // Guardar en Firestore (Firestore nunca tiene problemas de CORS)
                 await db.collection("salon_fama").add({
                     categoria: categoriaFinal,
                     anio: anio,
                     tituloBase: tituloBase,
                     descripcion: desc,
-                    imagenUrl: imgUrlDestino,
+                    imagenUrl: imgUrlFinal,
                     fechaSeleccionada: fecha,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
@@ -582,24 +544,24 @@
                 }
 
                 cerrarModalAñadir();
-                mostrarMensaje("✅ ¡Trofeo guardado y publicado con éxito!", "exito");
+                mostrarMensaje("✅ ¡Trofeo publicado con éxito en el Salón!", "exito");
 
             } catch (error) {
-                console.error("Error al registrar en Firestore:", error);
+                console.error("Error al guardar en Firestore:", error);
                 btn.innerText = "🚀 PUBLICAR EN EL SALÓN";
                 btn.disabled = false;
-                mostrarMensaje("❌ Error de guardado: " + error.message, "error");
+                mostrarMensaje("❌ Error al guardar: " + error.message, "error");
             }
         }
 
-        // ELIMINAR TROFEO
         function eliminarTrofeo(idDoc) {
-            db.collection("salon_fama").doc(idDoc).delete()
-              .then(() => mostrarMensaje("🗑️ Trofeo eliminado del salón.", "info"))
-              .catch(err => mostrarMensaje("Error al eliminar: " + err.message, "error"));
+            if (confirm("⚠️ ¿Estás seguro de que deseas ELIMINAR este trofeo?")) {
+                db.collection("salon_fama").doc(idDoc).delete()
+                  .then(() => mostrarMensaje("🗑️ Trofeo eliminado de la vitrina.", "info"))
+                  .catch(err => mostrarMensaje("Error al eliminar: " + err.message, "error"));
+            }
         }
 
-        // Inicializar listeners al cargar
         document.addEventListener("DOMContentLoaded", () => {
             escucharCategorias();
         });
